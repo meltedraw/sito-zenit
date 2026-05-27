@@ -158,18 +158,17 @@ const wrap   = document.getElementById('gameWrap');
 const C = { bg:'#FCFAF6', red:'#CF3D17', black:'#1a1a1a' };
 
 const LEVELS = [
-  { speed:3.4, paddleMult:1.15, twoHitRows:0, rows:5 }, // LV 1 — facile
-  { speed:4.4, paddleMult:1.00, twoHitRows:1, rows:6 }, // LV 2
-  { speed:5.3, paddleMult:0.88, twoHitRows:2, rows:7 }, // LV 3
-  { speed:6.2, paddleMult:0.75, twoHitRows:3, rows:7 }, // LV 4
-  { speed:7.5, paddleMult:0.62, twoHitRows:5, rows:7 }, // LV 5 MAX
+  { speed:5.2, paddleMult:1.15, twoHitRows:0, rows:5 }, // LV 1 — facile
+  { speed:6.5, paddleMult:1.00, twoHitRows:1, rows:6 }, // LV 2
+  { speed:7.8, paddleMult:0.88, twoHitRows:2, rows:7 }, // LV 3
+  { speed:9.2, paddleMult:0.75, twoHitRows:3, rows:7 }, // LV 4
+  { speed:11.0, paddleMult:0.62, twoHitRows:5, rows:7 }, // LV 5 MAX
 ];
 const MAX_LEVEL = LEVELS.length;
 
 const PU = {
   multi: { color:'#ff8800', label:'×3', desc:'Multi-Ball!' },
   wide:  { color:'#22aa44', label:'↔',  desc:'Paddle Largo!', dur:8000 },
-  slow:  { color:'#2266dd', label:'▼',  desc:'Slow Ball!',    dur:6000 },
   life:  { color:'#ff3366', label:'♥',  desc:'+1 Vita!' },
 };
 const PU_CHANCE = 0.12; // 12% per mattone distrutto
@@ -178,7 +177,7 @@ let W, H, dpr;
 let state = 'start';
 let score = 0, lives = 3, level = 1;
 let paddle, balls, bricks, particles, powerups;
-let effects = { wide:0, slow:0 };
+let effects = { wide:0 };
 let flashMsg = null;
 let animId = null, touchX = null;
 
@@ -273,12 +272,6 @@ function applyEffect(type){
     effects.wide = now + PU.wide.dur;
     paddle.w = paddle.baseW * 1.65;
     paddle.x = Math.min(paddle.x, W - paddle.w);
-  } else if(type === 'slow'){
-    effects.slow = now + PU.slow.dur;
-    balls.forEach(b => {
-      const spd = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
-      if(spd > 0){ const f=0.55; b.vx = b.vx/spd*spd*f; b.vy = b.vy/spd*spd*f; }
-    });
   } else if(type === 'life'){
     lives = Math.min(lives+1, 5);
     updateHUD();
@@ -293,7 +286,7 @@ function initLevel(resetAll){
   bricks   = makeBricks();
   particles = [];
   powerups  = [];
-  effects   = { wide:0, slow:0 };
+  effects   = { wide:0 };
   flashMsg  = null;
   updateHUD();
 }

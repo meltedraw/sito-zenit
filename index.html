@@ -47,12 +47,6 @@ body{
 .sb-year{ font-size:15px;font-weight:800;letter-spacing:1px;color:#FCFAF6;line-height:1; }
 @keyframes spinSlow{to{transform:rotate(360deg)}}
 
-/* corner brackets */
-.corner{position:absolute;width:32px;height:32px;opacity:0}
-.corner.tl{top:0;left:0;border-top:3px solid var(--red);border-left:3px solid var(--red);animation:fadeUp .5s ease .4s forwards}
-.corner.tr{top:0;right:0;border-top:3px solid var(--red);border-right:3px solid var(--red);animation:fadeUp .5s ease .5s forwards}
-.corner.bl{bottom:0;left:0;border-bottom:3px solid var(--red);border-left:3px solid var(--red);animation:fadeUp .5s ease .6s forwards}
-.corner.br{bottom:0;right:0;border-bottom:3px solid var(--red);border-right:3px solid var(--red);animation:fadeUp .5s ease .7s forwards}
 
 .home-logo{
   width:min(200px,55vw);
@@ -152,11 +146,6 @@ body{
 <body>
 
 <div class="home-hero">
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
-
   <div class="starburst-wrap" aria-hidden="true">
     <svg class="starburst-spin" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <path d="M60,4 L67,40 L98,18 L80,50 L116,52 L84,68 L104,98 L72,80 L68,116 L52,84 L22,104 L38,74 L4,60 L38,48 L20,18 L52,38 Z" fill="#CF3D17"/>
