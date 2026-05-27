@@ -26,14 +26,25 @@ body{
   overflow:hidden;
 }
 
-/* starburst */
-.starburst{
+/* starburst — solo la forma ruota, il testo resta dritto */
+.starburst-wrap{
   position:absolute;top:12px;right:12px;
   width:80px;height:80px;
   opacity:0;
-  animation:spinSlow 18s linear infinite, fadeUp 0.8s ease 1s forwards;
+  animation:fadeUp 0.8s ease 1s forwards;
+}
+.starburst-spin{
+  position:absolute;inset:0;width:100%;height:100%;
+  animation:spinSlow 18s linear infinite;
   transform-origin:center;
 }
+.starburst-text{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;pointer-events:none;
+}
+.sb-est{ font-size:10px;font-weight:800;letter-spacing:1.5px;color:#FCFAF6;line-height:1; }
+.sb-year{ font-size:15px;font-weight:800;letter-spacing:1px;color:#FCFAF6;line-height:1; }
 @keyframes spinSlow{to{transform:rotate(360deg)}}
 
 /* corner brackets */
@@ -60,28 +71,31 @@ body{
 }
 
 /* ── CARDS GRID ── */
-.home-grid{
+.home-grid-wrap{
   flex:1 1 0;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px 24px 8px;
+  overflow:hidden;
+}
+.home-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  grid-template-rows:1fr 1fr;
-  gap:2px;
-  background:var(--black);
-  border-top:2px solid var(--black);
-  overflow:hidden;
+  gap:12px;
+  width:100%;
+  max-width:380px;
 }
 
 .home-card{
   background:var(--white);
+  border:2px solid var(--red);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:8px;
+  gap:6px;
   text-decoration:none;color:var(--black);
-  padding:16px 12px;
-  position:relative;
-  overflow:hidden;
-  transition:background .15s, color .15s;
+  padding:18px 12px;
+  transition:background .15s, color .15s, border-color .15s;
   -webkit-tap-highlight-color:transparent;
   opacity:0;
+  min-height:100px;
 }
 .home-card:nth-child(1){animation:fadeUp .5s ease .6s forwards}
 .home-card:nth-child(2){animation:fadeUp .5s ease .7s forwards}
@@ -89,29 +103,21 @@ body{
 .home-card:nth-child(4){animation:fadeUp .5s ease .9s forwards}
 
 .home-card:active{background:var(--red);color:var(--white)}
-.home-card:active .card-icon{color:var(--white)}
-.home-card:active .card-sub{color:rgba(255,255,255,0.6)}
+.home-card:active .card-sub{color:rgba(255,255,255,.65)}
 
-/* card highlight — MENU è la principale */
-.home-card.primary{background:var(--red);color:var(--white)}
-.home-card.primary .card-icon{color:var(--white)}
-.home-card.primary .card-sub{color:rgba(255,255,255,0.65)}
+/* MENU: l'unica col piena */
+.home-card.primary{background:var(--red);color:var(--white);border-color:var(--red)}
+.home-card.primary .card-sub{color:rgba(255,255,255,.65)}
 .home-card.primary:active{background:#b03210}
 
-.card-icon{
-  font-size:32px;line-height:1;
-  color:var(--red);
-  transition:color .15s;
-}
-.home-card.primary .card-icon{color:var(--white)}
-
+.card-icon{ font-size:26px;line-height:1; }
 .card-label{
-  font-size:clamp(18px,5vw,22px);font-weight:800;
+  font-size:16px;font-weight:800;
   text-transform:uppercase;letter-spacing:2px;
   line-height:1;text-align:center;
 }
 .card-sub{
-  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
   color:var(--grey);text-align:center;line-height:1.3;
   transition:color .15s;
 }
@@ -133,13 +139,13 @@ body{
 @media(min-width:768px){
   html,body{overflow:auto;height:auto}
   body{min-height:100svh}
-  .home-hero{padding:48px 40px 28px}
+  .home-hero{padding:56px 40px 28px}
   .home-logo{width:220px}
-  .home-grid{max-width:600px;margin:0 auto;width:100%;border:2px solid var(--black);border-top:none}
-  .home-card{padding:40px 20px;gap:12px}
-  .card-icon{font-size:40px}
-  .card-label{font-size:24px}
-  .home-footer{max-width:600px;margin:0 auto;width:100%}
+  .home-grid{max-width:440px;gap:16px}
+  .home-card{padding:28px 20px;min-height:130px}
+  .card-icon{font-size:32px}
+  .card-label{font-size:20px}
+  .home-footer{max-width:500px;margin:0 auto;width:100%}
 }
 </style>
 </head>
@@ -151,12 +157,14 @@ body{
   <div class="corner bl"></div>
   <div class="corner br"></div>
 
-  <div class="starburst" aria-hidden="true">
-    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <div class="starburst-wrap" aria-hidden="true">
+    <svg class="starburst-spin" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <path d="M60,4 L67,40 L98,18 L80,50 L116,52 L84,68 L104,98 L72,80 L68,116 L52,84 L22,104 L38,74 L4,60 L38,48 L20,18 L52,38 Z" fill="#CF3D17"/>
-      <text x="60" y="54" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" fill="#FCFAF6" font-size="12" letter-spacing="1">EST.</text>
-      <text x="60" y="72" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" fill="#FCFAF6" font-size="17" letter-spacing="1">1996</text>
     </svg>
+    <div class="starburst-text">
+      <span class="sb-est">EST.</span>
+      <span class="sb-year">1996</span>
+    </div>
   </div>
 
   <img class="home-logo" src="logo.png" alt="Bar Zenit Pub">
@@ -164,27 +172,29 @@ body{
   <p class="home-tagline">Burger From 1996 · Ateleta AQ</p>
 </div>
 
-<div class="home-grid">
-  <a class="home-card primary" href="menu.html">
-    <span class="card-icon">🍔</span>
-    <span class="card-label">Menu</span>
-    <span class="card-sub">Scopri tutti<br>i nostri piatti</span>
-  </a>
-  <a class="home-card" href="chi-siamo.html">
-    <span class="card-icon" style="color:var(--red)">📖</span>
-    <span class="card-label">Chi Siamo</span>
-    <span class="card-sub">La nostra<br>storia</span>
-  </a>
-  <a class="home-card" href="prenota.html">
-    <span class="card-icon" style="color:var(--red)">📲</span>
-    <span class="card-label">Prenota</span>
-    <span class="card-sub">Riserva<br>il tuo tavolo</span>
-  </a>
-  <a class="home-card" href="gioca.html">
-    <span class="card-icon" style="color:var(--red)">🕹️</span>
-    <span class="card-label">Attesa</span>
-    <span class="card-sub">Gioca mentre<br>aspetti</span>
-  </a>
+<div class="home-grid-wrap">
+  <div class="home-grid">
+    <a class="home-card primary" href="menu.html">
+      <span class="card-icon">🍔</span>
+      <span class="card-label">Menu</span>
+      <span class="card-sub">Tutti i piatti</span>
+    </a>
+    <a class="home-card" href="chi-siamo.html">
+      <span class="card-icon">📖</span>
+      <span class="card-label">Chi Siamo</span>
+      <span class="card-sub">La nostra storia</span>
+    </a>
+    <a class="home-card" href="prenota.html">
+      <span class="card-icon">📲</span>
+      <span class="card-label">Prenota</span>
+      <span class="card-sub">Riserva il tavolo</span>
+    </a>
+    <a class="home-card" href="gioca.html">
+      <span class="card-icon">🕹️</span>
+      <span class="card-label">Attesa</span>
+      <span class="card-sub">Gioca mentre aspetti</span>
+    </a>
+  </div>
 </div>
 
 <div class="home-footer">

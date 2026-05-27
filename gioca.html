@@ -140,8 +140,8 @@ canvas{
 
   <!-- WIN SCREEN -->
   <div class="overlay hidden" id="winScreen">
-    <h2>🍔<br><span>Bravo!</span></h2>
-    <p>Hai distrutto tutto.<br>Il tuo ordine è quasi pronto!</p>
+    <h2 id="winTitle">🍔<br><span>Bravo!</span></h2>
+    <p id="winSub">Hai distrutto tutto.<br>Il tuo ordine è quasi pronto!</p>
     <div class="score-display" id="winScore">0</div>
     <div class="score-label">punti</div>
     <button class="btn-start" id="btnNext">Prossimo livello</button>
@@ -155,79 +155,75 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const wrap = document.getElementById('gameWrap');
 
-// ── PALETTE ──
-const C = {
-  bg:     '#FCFAF6',   // bianco brand
-  red:    '#CF3D17',   // rosso brand
-  black:  '#1a1a1a',
-  grey:   '#e8e4de',
-};
+const C = { bg:'#FCFAF6', red:'#CF3D17', black:'#1a1a1a' };
 
-// ── STATE ──
+// ── LEVEL CONFIG (ispirato ad Atari Breakout) ──
+// speed crescente, paddle che si restringe, righe che richiedono 2 colpi
+const LEVELS = [
+  { speed:3.8, paddleMult:1.00, twoHitRows:0 }, // LV 1
+  { speed:4.8, paddleMult:0.88, twoHitRows:1 }, // LV 2
+  { speed:5.7, paddleMult:0.78, twoHitRows:2 }, // LV 3
+  { speed:6.6, paddleMult:0.68, twoHitRows:3 }, // LV 4
+  { speed:7.8, paddleMult:0.60, twoHitRows:5 }, // LV 5 MAX
+];
+const MAX_LEVEL = LEVELS.length;
+
 let W, H, dpr;
-let state = 'start'; // start | playing | over | win
+let state = 'start';
 let score = 0, lives = 3, level = 1;
 let paddle, ball, bricks, particles;
-let animId;
-let touchX = null;
+let animId, touchX = null;
 
-// ── RESIZE ──
+function levelCfg(){ return LEVELS[Math.min(level-1, MAX_LEVEL-1)]; }
+
 function resize(){
   const rect = wrap.getBoundingClientRect();
-  W = rect.width;
-  H = rect.height;
+  W = rect.width; H = rect.height;
   dpr = window.devicePixelRatio || 1;
-  canvas.width  = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
   ctx.scale(dpr, dpr);
   if(state === 'playing') initLevel(false);
 }
 
-// ── PADDLE ──
 function makePaddle(){
-  const pw = Math.min(100, W * 0.28);
-  return {
-    w: pw, h: 10,
-    x: W/2 - pw/2,
-    y: H - 36,
-    speed: 0,
-  };
+  const pw = Math.min(88, W*0.25) * levelCfg().paddleMult;
+  return { w:pw, h:10, x:W/2-pw/2, y:H-36 };
 }
 
-// ── BALL ──
 function makeBall(){
-  const spd = 4 + level * 0.5;
+  const spd = levelCfg().speed;
+  const angle = (Math.random()*50-25) * Math.PI/180;
   return {
-    x: W/2, y: H/2,
-    r: 7,
-    vx: spd * (Math.random() > .5 ? 1 : -1),
-    vy: -spd,
-    launched: false,
+    x:W/2, y: paddle ? paddle.y-18 : H*0.65,
+    r:6,
+    vx: spd * Math.sin(angle) * (Math.random()>.5?1:-1),
+    vy: -spd * Math.cos(angle),
+    launched:false,
   };
 }
 
-// ── BRICKS ──
-const BRICK_ROWS = 6;
-const BRICK_COLS = 11;
+const BRICK_ROWS = 7;
+const BRICK_COLS = 13;
 const BRICK_PAD  = 3;
 
 function makeBricks(){
-  const bw = (W - BRICK_PAD * (BRICK_COLS + 1)) / BRICK_COLS;
-  const bh = 13;
-  const offsetY = 68;
-  // variazioni di rosso per dare profondità
-  const palette = ['#CF3D17','#D94F28','#C23210','#B82C0C','#E05530','#A82808'];
+  const cfg = levelCfg();
+  const bw = (W - BRICK_PAD*(BRICK_COLS+1)) / BRICK_COLS;
+  const bh = 10;
+  const offsetY = 58;
+  // Colori dal più scuro (top = più punti) al più chiaro (bottom)
+  const colors = ['#7a1800','#9a2408','#b82c0c','#cf3d17','#d94f28','#e05530','#ea7050'];
   const bricks = [];
-  for(let r = 0; r < BRICK_ROWS; r++){
-    for(let c = 0; c < BRICK_COLS; c++){
+  for(let r=0; r<BRICK_ROWS; r++){
+    for(let c=0; c<BRICK_COLS; c++){
+      const maxHits = r < cfg.twoHitRows ? 2 : 1;
       bricks.push({
-        x: BRICK_PAD + c * (bw + BRICK_PAD),
-        y: offsetY + r * (bh + BRICK_PAD),
-        w: bw, h: bh,
-        alive: true,
-        color: palette[r % palette.length],
+        x: BRICK_PAD + c*(bw+BRICK_PAD),
+        y: offsetY + r*(bh+BRICK_PAD),
+        w:bw, h:bh, alive:true,
+        color: colors[r % colors.length],
+        hits:maxHits, maxHits,
         pts: (BRICK_ROWS - r) * 10,
       });
     }
@@ -235,26 +231,15 @@ function makeBricks(){
   return bricks;
 }
 
-// ── PARTICLES ──
-function spawnParticles(x, y, color){
-  for(let i = 0; i < 8; i++){
-    const angle = Math.random() * Math.PI * 2;
-    const spd   = 2 + Math.random() * 4;
-    particles.push({
-      x, y,
-      vx: Math.cos(angle) * spd,
-      vy: Math.sin(angle) * spd,
-      life: 1,
-      decay: 0.04 + Math.random() * 0.04,
-      r: 2 + Math.random() * 3,
-      color,
-    });
+function spawnParticles(x,y,color){
+  for(let i=0;i<6;i++){
+    const a=Math.random()*Math.PI*2, spd=1.5+Math.random()*3;
+    particles.push({x,y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,life:1,decay:.05+Math.random()*.04,r:1.5+Math.random()*2.5,color});
   }
 }
 
-// ── INIT ──
-function initLevel(resetScore){
-  if(resetScore){ score = 0; lives = 3; level = 1; }
+function initLevel(resetAll){
+  if(resetAll){ score=0; lives=3; level=1; }
   paddle = makePaddle();
   ball   = makeBall();
   bricks = makeBricks();
@@ -264,58 +249,48 @@ function initLevel(resetScore){
 
 function updateHUD(){
   document.getElementById('hudScore').textContent = score;
-  document.getElementById('hudLevel').textContent = 'LV ' + level;
-  const h = ['❤️','❤️','❤️'].slice(0, lives).join('') || '💀';
-  document.getElementById('hudLives').textContent = h;
+  document.getElementById('hudLevel').textContent = level>=MAX_LEVEL ? 'LV MAX' : 'LV '+level;
+  document.getElementById('hudLives').textContent = '❤️'.repeat(Math.max(0,lives)) || '💀';
 }
 
 // ── DRAW ──
 function drawBrick(b){
-  // fill rosso
-  ctx.fillStyle = b.color;
+  const damaged = b.maxHits > 1 && b.hits < b.maxHits;
+  ctx.fillStyle = damaged ? '#e8b090' : b.color;
   ctx.fillRect(b.x, b.y, b.w, b.h);
-  // outline sottile scuro per definizione
-  ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-  ctx.lineWidth = 0.5;
-  ctx.strokeRect(b.x + 0.25, b.y + 0.25, b.w - 0.5, b.h - 0.5);
-  // shine top
-  ctx.fillStyle = 'rgba(255,255,255,0.18)';
-  ctx.fillRect(b.x, b.y, b.w, 3);
+  if(damaged){
+    // crepe visibili
+    ctx.strokeStyle = 'rgba(100,30,10,.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(b.x+b.w*.3, b.y); ctx.lineTo(b.x+b.w*.45, b.y+b.h);
+    ctx.moveTo(b.x+b.w*.65, b.y); ctx.lineTo(b.x+b.w*.55, b.y+b.h);
+    ctx.stroke();
+  }
+  ctx.fillStyle = 'rgba(255,255,255,.15)';
+  ctx.fillRect(b.x, b.y, b.w, 2.5);
+  ctx.strokeStyle = 'rgba(0,0,0,.1)';
+  ctx.lineWidth = .5;
+  ctx.strokeRect(b.x+.25, b.y+.25, b.w-.5, b.h-.5);
 }
 
 function drawPaddle(){
-  // corpo nero
   ctx.fillStyle = C.black;
-  if(ctx.roundRect){
-    ctx.beginPath();
-    ctx.roundRect(paddle.x, paddle.y, paddle.w, paddle.h, 4);
-    ctx.fill();
-  } else {
-    ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
-  }
-  // striscia rossa centrale brand
-  const sw = paddle.w * 0.45;
+  if(ctx.roundRect){ ctx.beginPath(); ctx.roundRect(paddle.x,paddle.y,paddle.w,paddle.h,4); ctx.fill(); }
+  else ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+  const sw = paddle.w * .45;
   ctx.fillStyle = C.red;
-  ctx.fillRect(paddle.x + (paddle.w - sw)/2, paddle.y + 3, sw, 4);
+  ctx.fillRect(paddle.x+(paddle.w-sw)/2, paddle.y+3, sw, 4);
 }
 
 function drawBall(){
-  // shadow soft
-  const g = ctx.createRadialGradient(ball.x, ball.y+2, 0, ball.x, ball.y, ball.r*3.5);
-  g.addColorStop(0, 'rgba(207,61,23,0.18)');
-  g.addColorStop(1, 'rgba(207,61,23,0)');
-  ctx.fillStyle = g;
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.r*3.5, 0, Math.PI*2);
-  ctx.fill();
-  // pallina bianca con outline rosso
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
-  ctx.fillStyle = '#FCFAF6';
-  ctx.fill();
-  ctx.strokeStyle = C.red;
-  ctx.lineWidth = 2.5;
-  ctx.stroke();
+  const g = ctx.createRadialGradient(ball.x,ball.y+1,0,ball.x,ball.y,ball.r*4);
+  g.addColorStop(0,'rgba(207,61,23,.2)');
+  g.addColorStop(1,'rgba(207,61,23,0)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r*4,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+  ctx.fillStyle='#FCFAF6'; ctx.fill();
+  ctx.strokeStyle=C.red; ctx.lineWidth=2.5; ctx.stroke();
 }
 
 function drawParticles(){
@@ -369,53 +344,72 @@ function loop(){
     if(ball.x + ball.r > W){ ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
     if(ball.y - ball.r < 0){ ball.y = ball.r; ball.vy = Math.abs(ball.vy); }
 
-    // paddle collision
-    if(
-      ball.vy > 0 &&
-      ball.y + ball.r >= paddle.y &&
-      ball.y - ball.r <= paddle.y + paddle.h &&
-      ball.x >= paddle.x &&
-      ball.x <= paddle.x + paddle.w
-    ){
+    // paddle hit
+    if(ball.vy>0 && ball.y+ball.r>=paddle.y && ball.y-ball.r<=paddle.y+paddle.h &&
+       ball.x>=paddle.x && ball.x<=paddle.x+paddle.w){
       ball.vy = -Math.abs(ball.vy);
-      // angle based on hit position
-      const hitPos = (ball.x - (paddle.x + paddle.w/2)) / (paddle.w/2);
-      ball.vx = hitPos * (4 + level * 0.5);
+      // angolo basato sulla posizione di impatto (come Atari)
+      const hitPos = (ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);
+      const spd = Math.sqrt(ball.vx*ball.vx+ball.vy*ball.vy);
+      ball.vx = hitPos * spd * 0.85;
+      ball.vy = -Math.sqrt(Math.max(spd*spd - ball.vx*ball.vx, 0.5));
       spawnParticles(ball.x, paddle.y, C.red);
     }
 
-    // out of bounds
-    if(ball.y - ball.r > H){
-      lives--;
-      updateHUD();
-      if(lives <= 0){
-        state = 'over';
-        document.getElementById('finalScore').textContent = score;
+    // out bottom → perdi vita
+    if(ball.y-ball.r>H){
+      lives--; updateHUD();
+      if(lives<=0){
+        state='over';
+        document.getElementById('finalScore').textContent=score;
         document.getElementById('gameOverScreen').classList.remove('hidden');
         return;
       }
-      ball = makeBall();
+      ball=makeBall();
     }
 
-    // brick collision
-    bricks.forEach(b => {
-      if(!b.alive) return;
-      if(
-        ball.x + ball.r > b.x && ball.x - ball.r < b.x + b.w &&
-        ball.y + ball.r > b.y && ball.y - ball.r < b.y + b.h
-      ){
-        b.alive = false;
-        ball.vy *= -1;
-        score += b.pts;
-        updateHUD();
-        spawnParticles(b.x + b.w/2, b.y + b.h/2, b.color);
-      }
-    });
+    // ── BRICK COLLISION — una sola per frame, con rilevamento faccia ──
+    let brickHit = false;
+    for(let i=0; i<bricks.length && !brickHit; i++){
+      const b = bricks[i];
+      if(!b.alive) continue;
+      const bL=ball.x-ball.r, bR=ball.x+ball.r, bT=ball.y-ball.r, bB=ball.y+ball.r;
+      if(bR>b.x && bL<b.x+b.w && bB>b.y && bT<b.y+b.h){
+        brickHit = true;
+        b.hits--;
+        if(b.hits<=0){
+          b.alive=false; score+=b.pts; updateHUD();
+          spawnParticles(b.x+b.w/2, b.y+b.h/2, b.color);
+        } else {
+          spawnParticles(b.x+b.w/2, b.y+b.h/2, 'rgba(220,140,90,0.9)');
+        }
+        // Rilevamento faccia colpita (min overlap)
+        const ol=bR-b.x, or_=b.x+b.w-bL, ot=bB-b.y, ob=b.y+b.h-bT;
+        const mn=Math.min(ol,or_,ot,ob);
+        if(mn===ol||mn===or_) ball.vx*=-1; else ball.vy*=-1;
 
-    // check win
-    if(bricks.every(b => !b.alive)){
-      state = 'win';
-      document.getElementById('winScore').textContent = score;
+        // Atari speed burst: colpendo le righe top la palla accelera leggermente
+        if(b.y < 58+3*(10+3)){
+          const spd=Math.sqrt(ball.vx*ball.vx+ball.vy*ball.vy);
+          const cap=levelCfg().speed*1.3;
+          if(spd<cap){ ball.vx*=1.06; ball.vy*=1.06; }
+        }
+      }
+    }
+
+    // win
+    if(bricks.every(b=>!b.alive)){
+      state='win';
+      document.getElementById('winScore').textContent=score;
+      if(level>=MAX_LEVEL){
+        document.getElementById('winTitle').innerHTML='🏆<br><span>Leggendario!</span>';
+        document.getElementById('winSub').textContent='Hai completato tutti i 5 livelli. Ordine in arrivo!';
+        document.getElementById('btnNext').textContent='Rigioca dall\'inizio';
+      } else {
+        document.getElementById('winTitle').innerHTML='🍔<br><span>Livello '+level+' Completo!</span>';
+        document.getElementById('winSub').textContent='Preparati al livello '+(level+1)+' — più veloce, più duro.';
+        document.getElementById('btnNext').textContent='Livello '+(level+1);
+      }
       document.getElementById('winScreen').classList.remove('hidden');
       return;
     }
@@ -478,8 +472,7 @@ document.getElementById('btnRestart').addEventListener('click', () => {
 });
 document.getElementById('btnNext').addEventListener('click', () => {
   document.getElementById('winScreen').classList.add('hidden');
-  level++;
-  initLevel(false);
+  if(level >= MAX_LEVEL){ level=1; initLevel(true); } else { level++; initLevel(false); }
   state = 'playing';
 });
 
