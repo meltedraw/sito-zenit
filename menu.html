@@ -47,7 +47,6 @@ nav{
   font-size:12px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
   color:var(--black);text-decoration:none;
   border-right:1px solid rgba(0,0,0,.1);white-space:nowrap;
-  transition:background .15s,color .15s;
   -webkit-tap-highlight-color:transparent;
 }
 .menu-tab:hover,.menu-tab.active{background:var(--red);color:var(--white)}
@@ -271,15 +270,15 @@ footer{background:var(--black);color:var(--white);padding:28px 22px;text-align:c
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_xyTVoQibWn-ejnu3Xr1rDLq8AzFkQVLIl2h1xB0dB_sEP3-MvRNFMdyEAbSxWzE_/exec';
 
 const CATS = [
-  { id:'sandwich', label:'Sandwich' },
+  { id:'sandwich',       label:'Sandwich' },
   { id:'burger',         label:'Burger' },
   { id:'burgerspeciali', label:'Burger Speciali' },
   { id:'snack',          label:'Snack' },
-  { id:'fries',    label:'Fries' },
-  { id:'texmex',   label:'Tex-Mex' },
-  { id:'cocktail', label:'Cocktail' },
-  { id:'bevande',  label:'Bevande' },
-  { id:'birre',    label:'Birre' },
+  { id:'fries',          label:'Fries' },
+  { id:'texmex',         label:'Tex-Mex' },
+  { id:'cocktail',       label:'Cocktail' },
+  { id:'bevande',        label:'Bevande' },
+  { id:'birre',          label:'Birre' },
 ];
 
 function fmt(p) {
