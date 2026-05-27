@@ -108,6 +108,45 @@ nav{
 .value-label{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
 .value-desc{font-size:12px;font-weight:400;color:var(--grey);line-height:1.4}
 
+/* ── MAPPA ── */
+.maps-section{
+  padding:40px 22px 48px;
+  border-top:2px solid var(--black);
+}
+.maps-label{
+  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  color:var(--red);margin-bottom:6px;
+}
+.maps-title{
+  font-size:clamp(32px,10vw,52px);font-weight:800;
+  text-transform:uppercase;letter-spacing:1.5px;line-height:1;
+  margin-bottom:10px;
+}
+.maps-address{
+  font-size:15px;font-weight:400;color:var(--grey);
+  line-height:1.6;margin-bottom:24px;
+}
+.maps-btns{
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.maps-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--black);color:var(--white);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  text-decoration:none;
+  padding:13px 22px;
+  border:2px solid var(--black);
+  transition:background .15s,color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.maps-btn:active{background:var(--red);border-color:var(--red)}
+.maps-btn.alt{
+  background:transparent;color:var(--black);
+}
+.maps-btn.alt:active{background:var(--red);color:var(--white);border-color:var(--red)}
+.maps-btn-icon{font-size:16px}
+
 /* ── RECENSIONI ── */
 .reviews-section{
   background:var(--black);color:var(--white);
@@ -225,6 +264,25 @@ footer{
     </div>
   </div>
 
+</div>
+
+<!-- ── DOVE SIAMO ── -->
+<div class="maps-section">
+  <div class="maps-label">Dove siamo</div>
+  <h2 class="maps-title">Trovaci</h2>
+  <p class="maps-address">Via Stazione, 6<br>67030 Ateleta (AQ), Abruzzo</p>
+  <div class="maps-btns">
+    <a class="maps-btn"
+       href="https://www.google.com/maps/search/?api=1&query=Bar+Zenit+Pub+Via+Stazione+6+Ateleta+AQ"
+       target="_blank" rel="noopener" aria-label="Apri su Google Maps">
+      <span class="maps-btn-icon">📍</span> Google Maps
+    </a>
+    <a class="maps-btn alt"
+       href="https://maps.apple.com/?q=Bar+Zenit+Pub,+Via+Stazione+6,+Ateleta,+AQ"
+       target="_blank" rel="noopener" aria-label="Apri su Apple Maps">
+      <span class="maps-btn-icon">🗺</span> Apple Maps
+    </a>
+  </div>
 </div>
 
 <div class="reviews-section">
