@@ -39,6 +39,7 @@ nav{
   scrollbar-width:none;-webkit-overflow-scrolling:touch;
   touch-action:pan-x;
   overscroll-behavior-x:contain;
+  scroll-behavior:auto;
 }
 .menu-tabs::-webkit-scrollbar{display:none}
 .menu-tab{
@@ -364,22 +365,29 @@ function initExpand() {
 }
 
 function initScrollSpy() {
-  const tabs = document.querySelectorAll('.menu-tab');
-  const tabsEl = document.querySelector('.menu-tabs');
-  const sections = document.querySelectorAll('.menu-section');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        tabs.forEach(t => t.classList.remove('active'));
-        const a = document.querySelector(`.menu-tab[href="#${e.target.id}"]`);
-        if (a) {
-          a.classList.add('active');
-          tabsEl.scrollLeft = a.offsetLeft - (tabsEl.clientWidth / 2) + (a.clientWidth / 2);
-        }
-      }
-    });
-  }, {rootMargin:'-20% 0px -70% 0px'});
-  sections.forEach(s => obs.observe(s));
+  const tabs     = document.querySelectorAll('.menu-tab');
+  const tabsEl   = document.querySelector('.menu-tabs');
+  const sections = [...document.querySelectorAll('.menu-section')];
+  const OFFSET   = 54 + 48 + 20;
+  let currentId  = '';
+
+  const update = () => {
+    let active = sections[0];
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top <= OFFSET) active = s;
+    }
+    if (active.id === currentId) return;
+    currentId = active.id;
+    tabs.forEach(t => t.classList.remove('active'));
+    const a = tabsEl.querySelector(`[href="#${active.id}"]`);
+    if (a) {
+      a.classList.add('active');
+      tabsEl.scrollLeft = a.offsetLeft - (tabsEl.clientWidth / 2) + (a.clientWidth / 2);
+    }
+  };
+
+  window.addEventListener('scroll', update, {passive:true});
+  update();
 }
 
 async function loadMenu() {
