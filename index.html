@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar Zenit Pub — Burger From 1996</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#CF3D17;
+  --white:#FCFAF6;
+  --black:#1a1a1a;
+  --grey:#7a7a7a;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow Condensed',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
+
+/* ── NAVBAR ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--white);
+  border-bottom:2px solid var(--black);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;
+  transform:translateY(-100%);
+  transition:transform 0.35s cubic-bezier(.22,1,.36,1);
+}
+nav.visible{transform:translateY(0)}
+.nav-logo{height:44px;width:auto}
+.nav-links{display:flex;gap:0;overflow:hidden}
+.nav-links a{
+  font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:var(--black);text-decoration:none;
+  padding:8px 14px;
+  border-left:1px solid rgba(0,0,0,0.12);
+  transition:background 0.15s,color 0.15s;
+}
+.nav-links a:first-child{border-left:none}
+.nav-links a:hover{background:var(--red);color:var(--white)}
+
+/* mobile nav */
+.nav-burger{
+  display:none;
+  flex-direction:column;gap:5px;cursor:pointer;padding:4px;
+  background:none;border:none;
+}
+.nav-burger span{display:block;width:26px;height:2px;background:var(--black);transition:all 0.2s}
+
+.mobile-menu{
+  display:none;
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:var(--red);z-index:200;
+  flex-direction:column;align-items:center;justify-content:center;gap:8px;
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{
+  font-size:36px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  color:var(--white);text-decoration:none;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.2);
+  width:80%;text-align:center;
+}
+.mobile-close{
+  position:absolute;top:20px;right:20px;
+  font-size:32px;font-weight:800;color:var(--white);
+  background:none;border:none;cursor:pointer;
+}
+
+/* ── HERO ── */
+#hero{
+  min-height:100svh;
+  background:var(--white);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 20px 80px;
+  position:relative;overflow:hidden;
+}
+
+/* Starburst badge */
+.hero-starburst{
+  position:absolute;top:20px;right:16px;
+  width:120px;height:120px;
+  animation:spinSlow 18s linear infinite;
+  transform-origin:center;
+  opacity:0;
+  animation:spinSlow 18s linear infinite, fadeDown 0.8s ease 1.2s forwards;
+}
+@keyframes spinSlow{ to{transform:rotate(360deg)} }
+
+/* Floating accent stars */
+.hero-star{
+  position:absolute;
+  color:var(--red);font-size:30px;line-height:1;
+  opacity:0;
+}
+.hero-star.s1{top:18%;left:10%;animation:fadeDown 0.5s ease 1.4s forwards, floatA 4s ease-in-out 2s infinite}
+.hero-star.s2{top:30%;right:8%;animation:fadeDown 0.5s ease 1.6s forwards, floatB 5s ease-in-out 2.2s infinite}
+.hero-star.s3{bottom:28%;left:7%;animation:fadeDown 0.5s ease 1.8s forwards, floatA 4.5s ease-in-out 2.4s infinite}
+.hero-star.s4{bottom:22%;right:10%;animation:fadeDown 0.5s ease 2s forwards, floatB 3.8s ease-in-out 2.6s infinite}
+@keyframes floatA{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-10px) rotate(20deg)}}
+@keyframes floatB{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(-15deg)}}
+
+/* Corner accents */
+.hero-corner{
+  position:absolute;
+  width:48px;height:48px;
+  opacity:0.18;
+}
+.hero-corner.tl{top:0;left:0;
+  border-top:4px solid var(--red);border-left:4px solid var(--red);
+  animation:fadeDown 0.6s ease 0.8s forwards;opacity:0;
+}
+.hero-corner.tr{top:0;right:0;
+  border-top:4px solid var(--red);border-right:4px solid var(--red);
+  animation:fadeDown 0.6s ease 0.9s forwards;opacity:0;
+}
+.hero-corner.bl{bottom:0;left:0;
+  border-bottom:4px solid var(--red);border-left:4px solid var(--red);
+  animation:fadeDown 0.6s ease 1s forwards;opacity:0;
+}
+.hero-corner.br{bottom:0;right:0;
+  border-bottom:4px solid var(--red);border-right:4px solid var(--red);
+  animation:fadeDown 0.6s ease 1.1s forwards;opacity:0;
+}
+
+/* Dashed oval ring behind logo */
+.hero-ring{
+  position:absolute;
+  width:min(360px,90vw);height:min(360px,90vw);
+  border:2px dashed rgba(207,61,23,0.18);
+  border-radius:50%;
+  animation:pulseRing 4s ease-in-out infinite, fadeDown 0.8s ease 0.6s forwards;
+  opacity:0;
+}
+@keyframes pulseRing{
+  0%,100%{transform:scale(1);opacity:0.18}
+  50%{transform:scale(1.04);opacity:0.32}
+}
+
+/* Horizontal ticker tape */
+.hero-ticker{
+  position:absolute;bottom:72px;left:0;right:0;
+  overflow:hidden;
+  opacity:0;animation:fadeDown 0.6s ease 1.3s forwards;
+}
+.hero-ticker-inner{
+  display:flex;white-space:nowrap;
+  animation:ticker 14s linear infinite;
+}
+.hero-ticker-inner span{
+  font-size:11px;font-weight:800;letter-spacing:5px;text-transform:uppercase;
+  color:rgba(207,61,23,0.25);padding:0 16px;flex-shrink:0;
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.hero-logo-img{
+  position:relative;z-index:2;
+  width:min(300px,78vw);
+  opacity:0;
+  animation:fadeDown 0.9s cubic-bezier(.22,1,.36,1) 0.2s forwards;
+}
+.hero-tagline{
+  position:relative;z-index:2;
+  margin-top:24px;
+  font-size:clamp(11px,3vw,13px);font-weight:600;letter-spacing:8px;
+  text-transform:uppercase;color:var(--red);
+  opacity:0;animation:fadeDown 0.7s ease 0.6s forwards;
+}
+.hero-divider{
+  position:relative;z-index:2;
+  width:60px;height:2px;background:var(--red);
+  margin:18px auto;
+  opacity:0;animation:fadeDown 0.7s ease 0.5s forwards;
+}
+.scroll-cta{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  text-decoration:none;z-index:2;
+  opacity:0;animation:fadeDown 0.7s ease 1.4s forwards;
+}
+.scroll-cta span{
+  font-size:10px;font-weight:600;letter-spacing:4px;
+  text-transform:uppercase;color:rgba(26,26,26,0.35);
+}
+.scroll-arrow{
+  width:18px;height:18px;
+  border-right:2px solid var(--red);border-bottom:2px solid var(--red);
+  transform:rotate(45deg);
+  animation:bounce 1.4s ease-in-out infinite;
+}
+
+/* ── MENU NAV TABS ── */
+.menu-tabs{
+  position:sticky;top:66px;z-index:50;
+  background:var(--white);border-bottom:2px solid var(--black);
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.menu-tabs::-webkit-scrollbar{display:none}
+.menu-tab{
+  flex-shrink:0;
+  padding:14px 18px;
+  font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:var(--black);text-decoration:none;
+  border-right:1px solid rgba(0,0,0,0.1);
+  transition:background 0.15s,color 0.15s;
+  white-space:nowrap;
+}
+.menu-tab:hover,.menu-tab.active{background:var(--red);color:var(--white)}
+
+/* ── MENU SECTIONS ── */
+.menu-section{padding:48px 20px 60px}
+.menu-section:nth-child(even){background:rgba(207,61,23,0.04)}
+
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;
+  padding-bottom:12px;
+  border-bottom:2px solid var(--black);
+}
+.section-head h2{
+  font-size:clamp(28px,8vw,48px);font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;
+}
+.section-head .price-col{
+  font-size:12px;font-weight:600;letter-spacing:4px;
+  text-transform:uppercase;color:var(--red);
+}
+
+/* item row */
+.menu-item{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;
+  padding:18px 0;
+  border-bottom:1px dashed rgba(207,61,23,0.4);
+}
+.menu-item:last-child{border-bottom:none}
+.item-body{flex:1}
+.item-name{
+  font-size:clamp(20px,5vw,26px);font-weight:800;
+  text-transform:uppercase;letter-spacing:0.5px;line-height:1;
+}
+.item-badge{
+  display:inline-block;
+  background:var(--red);color:var(--white);
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  padding:2px 6px;margin-left:8px;vertical-align:middle;
+}
+.item-desc{
+  font-size:13px;font-weight:400;color:var(--grey);
+  margin-top:4px;line-height:1.4;
+}
+.item-size{font-size:11px;font-weight:600;color:rgba(26,26,26,0.35);margin-top:2px}
+.item-price{
+  font-size:clamp(20px,5vw,26px);font-weight:800;
+  color:var(--red);white-space:nowrap;
+  letter-spacing:0.5px;
+}
+.item-price-multi{
+  display:flex;flex-direction:column;align-items:flex-end;gap:2px;
+}
+.item-price-multi span{font-size:14px;font-weight:800;color:var(--red)}
+.item-price-multi small{font-size:10px;font-weight:600;color:var(--grey);letter-spacing:1px}
+
+/* category subhead */
+.cat-head{
+  display:inline-block;
+  background:var(--red);color:var(--white);
+  font-size:14px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  padding:5px 16px;margin:28px 0 16px;
+}
+
+/* salsa row */
+.salsa-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;margin-top:24px;
+  border:1px solid var(--black);
+}
+.salsa-row span{font-size:15px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.salsa-row b{font-size:18px;font-weight:800;color:var(--red)}
+
+/* ── CHI SIAMO ── */
+#chi-siamo{
+  background:var(--red);color:var(--white);
+  padding:72px 24px;text-align:center;
+}
+#chi-siamo h2{
+  font-size:clamp(36px,10vw,72px);font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:24px;
+}
+#chi-siamo p{
+  font-size:clamp(16px,4vw,20px);font-weight:400;line-height:1.6;
+  max-width:600px;margin:0 auto 16px;
+  opacity:0.88;
+}
+.est-badge{
+  display:inline-block;
+  border:2px solid var(--white);
+  font-size:12px;font-weight:800;letter-spacing:6px;
+  text-transform:uppercase;padding:8px 24px;margin-top:24px;
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--black);color:var(--white);
+  padding:40px 24px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:12px;text-align:center;
+}
+.footer-logo{height:60px;width:auto;margin-bottom:8px}
+.footer-info{font-size:13px;font-weight:400;letter-spacing:1px;opacity:0.6;line-height:1.8}
+.footer-info a{color:inherit;text-decoration:none}
+.footer-divider{width:40px;height:1px;background:rgba(255,255,255,0.2)}
+.footer-copy{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;opacity:0.35}
+.footer-orari{text-align:center}
+.footer-orari-title{font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:0.4;margin-bottom:10px}
+.footer-orari-row{display:flex;justify-content:center;gap:24px;font-size:13px;font-weight:400;opacity:0.6;line-height:2}
+.footer-orari-row span:first-child{min-width:110px;text-align:right}
+.footer-orari-row span:last-child{min-width:80px;text-align:left}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeDown{to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{
+  0%,100%{transform:rotate(45deg) translate(0,0)}
+  50%{transform:rotate(45deg) translate(3px,3px)}
+}
+
+/* ── PHOTO EXPAND ── */
+.menu-item{cursor:pointer;position:relative;transition:background 0.12s}
+.menu-item:active{background:rgba(207,61,23,0.05)}
+.expand-icon{
+  font-size:12px;color:var(--red);opacity:0.45;
+  margin-left:10px;flex-shrink:0;align-self:center;
+  transition:transform 0.25s ease,opacity 0.2s;
+  line-height:1;
+}
+.menu-item.photo-open .expand-icon{transform:rotate(180deg);opacity:0.8}
+.item-photo-expand{
+  overflow:hidden;
+  max-height:0;
+  transition:max-height 0.4s cubic-bezier(.22,1,.36,1);
+}
+.item-photo-expand.open{max-height:320px}
+.item-photo-expand img{
+  width:100%;height:220px;
+  object-fit:cover;display:block;
+  border-bottom:1px dashed rgba(207,61,23,0.3);
+  margin-bottom:2px;
+}
+
+/* scroll anchoring — evita che il contenuto finisca dietro navbar+tabs */
+.menu-section, #chi-siamo{scroll-margin-top:74px}
+
+/* ── DESKTOP ── */
+@media(min-width:768px){
+  nav{padding:10px 40px}
+  .nav-burger{display:none}
+  .nav-links{display:flex}
+  .nav-logo-mobile{display:none}
+  .menu-tabs{display:none}
+  .menu-section{padding:64px 60px 80px;max-width:900px;margin:0 auto}
+  .item-name{font-size:26px}
+  .item-price{font-size:24px}
+}
+
+@media(max-width:767px){
+  .nav-links{display:none}
+  .nav-burger{display:flex}
+  nav{
+    padding:8px 16px;
+    display:grid;grid-template-columns:44px 1fr 44px;align-items:center;
+    transform:translateY(0)!important;
+    top:60px; /* spazio respiro sopra la navbar */
+  }
+  .nav-logo-mobile{display:flex;justify-content:center}
+  .nav-logo-mobile img{height:38px;width:auto}
+  .nav-logo{display:none}
+
+  /* starburst sotto la navbar su mobile */
+  .hero-starburst{top:136px;right:12px}
+
+  /* top sticky tab bar — sotto navbar (60px offset + 54px navbar ≈ 114px) */
+  .menu-tabs{
+    position:sticky;
+    top:114px;
+    border-top:none;
+    border-bottom:2px solid var(--black);
+    background:var(--white);
+    padding-bottom:0;
+  }
+  .menu-tab{padding:10px 12px;font-size:11px;letter-spacing:2px}
+
+  /* scroll anchoring su mobile: navbar(60+54) + tabs(46) + buffer = 168px */
+  .menu-section, #chi-siamo{scroll-margin-top:168px}
+
+  body{padding-bottom:0}
+  .scroll-cta{bottom:16px}
+  .hero-ticker{bottom:72px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" style="display:flex;align-items:center"><img class="nav-logo" src="logo.png" alt="Bar Zenit Pub"></a>
+  <a href="#hero" class="nav-logo-mobile"><img src="logo.png" alt="Bar Zenit Pub"></a>
+  <div class="nav-links">
+    <a href="#sandwich">Sandwich</a>
+    <a href="#burger">Burger</a>
+    <a href="#snack">Snack</a>
+    <a href="#fries">Fries</a>
+    <a href="#texmex">Tex-Mex</a>
+    <a href="#cocktail">Cocktail</a>
+    <a href="#bevande">Bevande</a>
+    <a href="#birre">Birre</a>
+    <a href="#chi-siamo">Chi Siamo</a>
+  </div>
+  <button class="nav-burger" onclick="openMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="closeMenu()">✕</button>
+  <a href="#sandwich" onclick="closeMenu()">Sandwich</a>
+  <a href="#burger" onclick="closeMenu()">Burger</a>
+  <a href="#snack" onclick="closeMenu()">Snack</a>
+  <a href="#fries" onclick="closeMenu()">Fries</a>
+  <a href="#texmex" onclick="closeMenu()">Tex-Mex</a>
+  <a href="#cocktail" onclick="closeMenu()">Cocktail</a>
+  <a href="#bevande" onclick="closeMenu()">Bevande</a>
+  <a href="#birre" onclick="closeMenu()">Birre</a>
+  <a href="#chi-siamo" onclick="closeMenu()">Chi Siamo</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+
+  <!-- Corner brackets -->
+  <div class="hero-corner tl"></div>
+  <div class="hero-corner tr"></div>
+  <div class="hero-corner bl"></div>
+  <div class="hero-corner br"></div>
+
+  <!-- Dashed ring -->
+  <div class="hero-ring"></div>
+
+  <!-- Starburst EST. 1996 -->
+  <div class="hero-starburst" aria-hidden="true">
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60,4 L67,40 L98,18 L80,50 L116,52 L84,68 L104,98 L72,80 L68,116 L52,84 L22,104 L38,74 L4,60 L38,48 L20,18 L52,38 Z" fill="#CF3D17"/>
+      <text x="60" y="54" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" fill="#FCFAF6" font-size="12" letter-spacing="1">EST.</text>
+      <text x="60" y="72" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" fill="#FCFAF6" font-size="17" letter-spacing="1">1996</text>
+    </svg>
+  </div>
+
+  <!-- Floating stars -->
+  <div class="hero-star s1" aria-hidden="true">✦</div>
+  <div class="hero-star s2" aria-hidden="true">★</div>
+  <div class="hero-star s3" aria-hidden="true">✦</div>
+  <div class="hero-star s4" aria-hidden="true">★</div>
+
+  <!-- Logo -->
+  <img class="hero-logo-img" src="logo.png" alt="Bar Zenit Pub">
+  <div class="hero-divider"></div>
+  <p class="hero-tagline">Burger From 1996 &nbsp;·&nbsp; Ateleta (AQ)</p>
+
+  <!-- Ticker tape -->
+  <div class="hero-ticker" aria-hidden="true">
+    <div class="hero-ticker-inner">
+      <span>BURGER FROM 1996</span><span>·</span>
+      <span>ATELETA AQ</span><span>·</span>
+      <span>BAR ZENIT PUB</span><span>·</span>
+      <span>BURGER FROM 1996</span><span>·</span>
+      <span>ATELETA AQ</span><span>·</span>
+      <span>BAR ZENIT PUB</span><span>·</span>
+      <span>BURGER FROM 1996</span><span>·</span>
+      <span>ATELETA AQ</span><span>·</span>
+    </div>
+  </div>
+
+  <a class="scroll-cta" href="#sandwich">
+    <span>Menu</span>
+    <div class="scroll-arrow"></div>
+  </a>
+</section>
+
+<!-- MENU TABS -->
+<div class="menu-tabs">
+  <a class="menu-tab" href="#sandwich">Sandwich</a>
+  <a class="menu-tab" href="#burger">Burger</a>
+  <a class="menu-tab" href="#snack">Snack</a>
+  <a class="menu-tab" href="#fries">Fries</a>
+  <a class="menu-tab" href="#texmex">Tex-Mex</a>
+  <a class="menu-tab" href="#cocktail">Cocktail</a>
+  <a class="menu-tab" href="#bevande">Bevande</a>
+  <a class="menu-tab" href="#birre">Birre</a>
+</div>
+
+<!-- SANDWICH -->
+<section class="menu-section" id="sandwich">
+  <div class="section-head">
+    <h2>Sandwich</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Crostone</div>
+      <div class="item-desc">crudo · mozzarella · pomodoro · insalata · maionese</div>
+    </div>
+    <div class="item-price">6,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">½ Luna</div>
+      <div class="item-desc">crudo · mozzarella · insalata · pomodoro · maionese</div>
+    </div>
+    <div class="item-price">6,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">½ Luna <span style="font-size:0.7em;opacity:0.6">con Ventricina</span></div>
+      <div class="item-desc">ventricina · mozzarella · insalata · pomodoro · maionese</div>
+    </div>
+    <div class="item-price">7,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Ciabattina</div>
+      <div class="item-desc">crudo · mozzarella · pomodoro · insalata · maionese</div>
+    </div>
+    <div class="item-price">5,30€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Ciabattina <span style="font-size:0.7em;opacity:0.6">con Tonno</span></div>
+      <div class="item-desc">tonno · mozzarella · pomodoro · insalata · maionese</div>
+    </div>
+    <div class="item-price">6,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Piadina</div>
+      <div class="item-desc">crudo · mozzarella</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Piadina <span style="font-size:0.7em;opacity:0.6">con Ventricina</span></div>
+      <div class="item-desc">ventricina · mozzarella</div>
+    </div>
+    <div class="item-price">5,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Hot Dog</div>
+      <div class="item-desc">wrustel · insalata · pomodoro · salse</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Panino</div>
+      <div class="item-desc">salsiccia</div>
+    </div>
+    <div class="item-price">5,00€</div>
+  </div>
+</section>
+
+<!-- BURGER -->
+<section class="menu-section" id="burger">
+  <div class="section-head">
+    <h2>Burger</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Hamburger</div>
+      <div class="item-desc">burger 100gr · pomodoro · insalata · salse</div>
+    </div>
+    <div class="item-price-multi">
+      <span>6,50€ <small>210gr</small></span>
+      <span>14,00€ <small>340gr</small></span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Cheeseburger</div>
+      <div class="item-desc">burger 100gr · pomodoro · insalata · salse · cheddar</div>
+    </div>
+    <div class="item-price-multi">
+      <span>6,50€ <small>piccolo</small></span>
+      <span>10,00€ <small>grande</small></span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">N 15°</div>
+      <div class="item-desc">burger 100gr · insalata · maionese · mozzarella · ventricina piccante · salsa burger</div>
+    </div>
+    <div class="item-price-multi">
+      <span>7,00€ <small>piccolo</small></span>
+      <span>11,50€ <small>grande</small></span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Texas</div>
+      <div class="item-desc">bun artigianale · burger 150gr · cheddar · bacon · insalata · maionese</div>
+    </div>
+    <div class="item-price-multi">
+      <span>5,30€ <small>piccolo</small></span>
+      <span>10,50€ <small>grande</small></span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Bismarck</div>
+      <div class="item-desc">bun artigianale · burger 150gr · uovo · bacon · insalata · pomodoro · salse</div>
+    </div>
+    <div class="item-price-multi">
+      <span>6,00€ <small>piccolo</small></span>
+      <span>11,50€ <small>grande</small></span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Chicken Burger</div>
+      <div class="item-desc">burger di pollo fritto 200gr · insalata · pomodoro · maionese · cheddar</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Croburger</div>
+      <div class="item-desc">burger 150gr · insalata · cheddar · cipolle · maionese</div>
+    </div>
+    <div class="item-price">5,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Chick'n Bacon</div>
+      <div class="item-desc">cotoletta di pollo fritta 150gr · insalata · pomodoro · maionese · bacon · salsa segreta</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Oishi Burger</div>
+      <div class="item-desc">panino artigianale · burger di pollo fritto 200gr · salsa asiatica agrodolce · cipolle · insalata · zenzero agrodolce · fonduta di philadelphia</div>
+    </div>
+    <div class="item-price">5,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Fassona Piemontese</div>
+      <div class="item-desc">burger 200gr · pomodoro · insalata · salse</div>
+    </div>
+    <div class="item-price">5,00€</div>
+  </div>
+  <div class="salsa-row">
+    <span>Salsa Bustina</span>
+    <b>0,30€</b>
+  </div>
+</section>
+
+<!-- SNACK -->
+<section class="menu-section" id="snack">
+  <div class="section-head">
+    <h2>Snack</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Anelli di Cipolla</div>
+      <div class="item-size">7 pz</div>
+    </div>
+    <div class="item-price">6,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Alette di Pollo</div>
+      <div class="item-size">250gr</div>
+    </div>
+    <div class="item-price">6,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Camembert</div>
+      <div class="item-size">6 pz</div>
+    </div>
+    <div class="item-price">7,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Nuggets</div>
+      <div class="item-size">6 pz</div>
+    </div>
+    <div class="item-price">5,30€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Bastoncini di Formaggio</div>
+      <div class="item-size">5 pz</div>
+    </div>
+    <div class="item-price">6,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Crocchette di Patate</div>
+      <div class="item-size">6 pz</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Spiedini di Petto di Pollo</div>
+      <div class="item-desc">bocconcini di pollo con peperoni verdi, paprika e coriandolo</div>
+      <div class="item-size">220gr</div>
+    </div>
+    <div class="item-price">7,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Cheese Bites <span class="item-badge">NEW</span></div>
+      <div class="item-desc">bocconcini cheddar e sottoaceti</div>
+      <div class="item-size">5 pz</div>
+    </div>
+    <div class="item-price">4,00€</div>
+  </div>
+</section>
+
+<!-- FRIES -->
+<section class="menu-section" id="fries">
+  <div class="section-head">
+    <h2>Fries</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="cat-head">Fries</div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Classiche</div></div>
+    <div class="item-price">3,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Rustiche</div></div>
+    <div class="item-price">4,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">BBQ</div></div>
+    <div class="item-price">4,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Cheddar</div></div>
+    <div class="item-price">4,70€</div>
+  </div>
+
+  <div class="cat-head">Fries Pluss</div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Patatine + Cotoletta Pollo</div>
+      <div class="item-size">150gr</div>
+    </div>
+    <div class="item-price">7,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Patatine + Wrustel</div></div>
+    <div class="item-price">5,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Patatine + Hamburger</div></div>
+    <div class="item-price">7,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Patatine + Maxi Schnitzel Pollo</div>
+      <div class="item-size">250gr</div>
+    </div>
+    <div class="item-price">8,90€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Patatine + Maxi Schnitzel Maiale</div>
+      <div class="item-size">250gr</div>
+    </div>
+    <div class="item-price">9,50€</div>
+  </div>
+</section>
+
+<!-- TEX-MEX -->
+<section class="menu-section" id="texmex">
+  <div class="section-head">
+    <h2>Tex-Mex</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Mexo Burger</div>
+      <div class="item-desc">salsa guacamole · cheddar · jalapeno · insalata · salsa dip mex · burger 200gr · carote alla messicana</div>
+    </div>
+    <div class="item-price">11,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Hot Dog Mex</div>
+      <div class="item-desc">wrustel · jalapeno · cheddar · pomodoro · insalata · salse</div>
+    </div>
+    <div class="item-price">5,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Maxi Mex</div>
+      <div class="item-desc">straccetti di petto di pollo arrosto · insalata · pomodoro · jalapeno · maionese</div>
+    </div>
+    <div class="item-price">7,80€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Burrito</div>
+      <div class="item-desc">manzo · cheddar · insalata · jalapeno · salsa messicana con fagioli e mais</div>
+    </div>
+    <div class="item-price">7,80€</div>
+  </div>
+
+  <div class="cat-head">Extras Mex</div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Avocat Su</div>
+      <div class="item-desc">bocconcini di avocado impanati e fritti</div>
+      <div class="item-size">6 pz</div>
+    </div>
+    <div class="item-price">4,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Habanero</div>
+      <div class="item-desc">habanero ripieno di formaggio</div>
+      <div class="item-size">6 pz</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Nachos</div>
+      <div class="item-desc">triangoli ripieni di cheddar e peperoni</div>
+      <div class="item-size">6 pz</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Jalapeno</div>
+      <div class="item-desc">jalapeno ripieni di formaggio</div>
+      <div class="item-size">5 pz</div>
+    </div>
+    <div class="item-price">6,00€</div>
+  </div>
+</section>
+
+<!-- COCKTAIL -->
+<section class="menu-section" id="cocktail">
+  <div class="section-head">
+    <h2>Cocktail</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <!-- ⚠️ PLACEHOLDER — sostituire con voci reali -->
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Spritz</div>
+      <div class="item-desc">aperol · prosecco · seltz · arancia</div>
+    </div>
+    <div class="item-price">—</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Mojito</div>
+      <div class="item-desc">rum · menta · lime · zucchero · seltz</div>
+    </div>
+    <div class="item-price">—</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Negroni</div>
+      <div class="item-desc">gin · campari · vermouth rosso</div>
+    </div>
+    <div class="item-price">—</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Hugo</div>
+      <div class="item-desc">prosecco · sciroppo di sambuco · menta · seltz</div>
+    </div>
+    <div class="item-price">—</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Gin Tonic</div>
+      <div class="item-desc">gin · acqua tonica · lime</div>
+    </div>
+    <div class="item-price">—</div>
+  </div>
+</section>
+
+<!-- BEVANDE -->
+<section class="menu-section" id="bevande">
+  <div class="section-head">
+    <h2>Bevande</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Acqua</div></div>
+    <div class="item-price">1,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Bibita Lattina</div></div>
+    <div class="item-price">2,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Red Bull</div></div>
+    <div class="item-price">3,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body"><div class="item-name">Ginger Beer</div></div>
+    <div class="item-price">3,50€</div>
+  </div>
+</section>
+
+<!-- BIRRE -->
+<section class="menu-section" id="birre">
+  <div class="section-head">
+    <h2>Birre</h2>
+    <span class="price-col">Price</span>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Peroni</div>
+      <div class="item-size">33 cl</div>
+    </div>
+    <div class="item-price">3,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Peroni</div>
+      <div class="item-size">66 cl</div>
+    </div>
+    <div class="item-price">4,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Menabrea</div>
+      <div class="item-size">33 cl</div>
+    </div>
+    <div class="item-price">3,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Beck's</div>
+      <div class="item-size">33 cl</div>
+    </div>
+    <div class="item-price">3,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Heineken</div>
+      <div class="item-size">33 cl</div>
+    </div>
+    <div class="item-price">3,50€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Bjorne</div>
+      <div class="item-size">33 cl</div>
+    </div>
+    <div class="item-price">3,00€</div>
+  </div>
+  <div class="menu-item">
+    <div class="item-body">
+      <div class="item-name">Tennentes</div>
+      <div class="item-size">33 cl</div>
+    </div>
+    <div class="item-price">3,50€</div>
+  </div>
+</section>
+
+<!-- CHI SIAMO -->
+<section id="chi-siamo">
+  <h2>Chi Siamo</h2>
+  <p>Dal 1996, il cuore pulsante di Ateleta. Una storia di sapori autentici, birre ghiacciate e quella semplicità che non passa mai di moda.</p>
+  <p>Bar Pub Zenit — dove ogni burger racconta trent'anni di passione.</p>
+  <div class="est-badge">Est. 1996</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img class="footer-logo" src="logo.png" alt="Bar Zenit Pub">
+  <div class="footer-divider"></div>
+  <div class="footer-info">
+    Via Stazione, 6 — 67030 Ateleta (AQ)<br>
+    <a href="tel:+393515370997">351 537 0997</a> ·
+    <a href="mailto:info@barzenitpub.it">info@barzenitpub.it</a>
+  </div>
+  <div class="footer-divider"></div>
+  <!-- ORARI -->
+  <div class="footer-orari">
+    <div class="footer-orari-title">Orari</div>
+    <div class="footer-orari-row"><span>Lun – Ven</span><span>— —</span></div>
+    <div class="footer-orari-row"><span>Sabato</span><span>— —</span></div>
+    <div class="footer-orari-row"><span>Domenica</span><span>— —</span></div>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-copy">© 2026 Bar Zenit Pub · Burger From 1996</div>
+</footer>
+
+<script>
+// Navbar: desktop only — appears after 60% hero scroll
+// On mobile it's always visible via CSS (transform:translateY(0)!important)
+const navbar = document.getElementById('navbar');
+if (window.innerWidth >= 768) {
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('visible', window.scrollY > window.innerHeight * 0.6);
+  }, {passive: true});
+}
+
+// Mobile menu overlay
+function openMenu() { document.getElementById('mobileMenu').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); document.body.style.overflow=''; }
+
+// Active tab highlight
+const tabs = document.querySelectorAll('.menu-tab');
+const sections = document.querySelectorAll('.menu-section, #chi-siamo');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tabs.forEach(t => t.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.menu-tab[href="#${id}"]`);
+      if (active) { active.classList.add('active'); active.scrollIntoView({block:'nearest',inline:'center'}); }
+    }
+  });
+}, {threshold: 0.3});
+sections.forEach(s => observer.observe(s));
+
+// ── PHOTO EXPAND ──
+// Inject expand icon + photo accordion after every .menu-item
+const placeholderSvg = (label) => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="220"><rect width="600" height="220" fill="#CF3D17"/><rect x="40" y="40" width="520" height="140" fill="none" stroke="#FCFAF6" stroke-width="2" stroke-dasharray="8 4" opacity="0.4"/><text x="300" y="95" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="18" fill="#FCFAF6" letter-spacing="4">FOTO IN ARRIVO</text><text x="300" y="135" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="14" fill="#FCFAF6" letter-spacing="2" opacity="0.6">${label.toUpperCase().slice(0,28)}</text></svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+};
+
+document.querySelectorAll('.menu-item').forEach(item => {
+  // Add expand icon
+  const icon = document.createElement('span');
+  icon.className = 'expand-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.textContent = '▾';
+  item.appendChild(icon);
+
+  // Build photo expand div
+  const expand = document.createElement('div');
+  expand.className = 'item-photo-expand';
+
+  const nameEl = item.querySelector('.item-name');
+  const label = nameEl ? nameEl.textContent.trim() : 'FOTO';
+
+  const img = document.createElement('img');
+  img.src = placeholderSvg(label);
+  img.alt = label;
+  img.loading = 'lazy';
+  expand.appendChild(img);
+
+  item.insertAdjacentElement('afterend', expand);
+
+  // Toggle function (shared tra click e touch)
+  let touching = false;
+  const toggle = () => {
+    const isOpen = expand.classList.contains('open');
+    document.querySelectorAll('.item-photo-expand.open').forEach(e => e.classList.remove('open'));
+    document.querySelectorAll('.menu-item.photo-open').forEach(m => m.classList.remove('photo-open'));
+    if (!isOpen) {
+      expand.classList.add('open');
+      item.classList.add('photo-open');
+      setTimeout(() => expand.scrollIntoView({behavior:'smooth', block:'center'}), 100);
+    }
+  };
+
+  // Touch: usa touchend per evitare delay 300ms su iOS
+  item.addEventListener('touchstart', () => { touching = true; }, {passive:true});
+  item.addEventListener('touchend', (e) => {
+    if (touching) { touching = false; e.preventDefault(); toggle(); }
+  });
+  // Click per desktop
+  item.addEventListener('click', () => { if (!touching) toggle(); });
+});
+</script>
+</body>
+</html>
