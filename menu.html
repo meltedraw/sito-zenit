@@ -295,7 +295,9 @@ function buildItem(item) {
   const desc   = item.ingredienti ? `<div class="item-desc">${item.ingredienti}</div>` : '';
   const taglia = item.taglia ? `<div class="item-size">${item.taglia}</div>` : '';
   let price;
-  if (item.prezzo2) {
+  if (item.prezzo2 && item.prezzo3) {
+    price = `<div class="item-price-multi"><span>${fmt(item.prezzo)} <small>${item.label1}</small></span><span>${fmt(item.prezzo2)} <small>${item.label2}</small></span><span>${fmt(item.prezzo3)} <small>${item.label3}</small></span></div>`;
+  } else if (item.prezzo2) {
     price = `<div class="item-price-multi"><span>${fmt(item.prezzo)} <small>${item.label1}</small></span><span>${fmt(item.prezzo2)} <small>${item.label2}</small></span></div>`;
   } else {
     price = `<div class="item-price">${fmt(item.prezzo)}</div>`;
