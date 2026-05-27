@@ -280,6 +280,15 @@ const CATS = [
   { id:'birre',          label:'Birre' },
 ];
 
+function driveThumb(url) {
+  if (!url) return null;
+  let m = url.match(/\/d\/([a-zA-Z0-9_-]{25,})/);
+  if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w800`;
+  m = url.match(/[?&]id=([a-zA-Z0-9_-]{25,})/);
+  if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w800`;
+  return url;
+}
+
 function fmt(p) {
   if (!p || p === '—') return '—';
   const n = parseFloat(p);
@@ -302,7 +311,9 @@ function buildItem(item) {
   } else {
     price = `<div class="item-price">${fmt(item.prezzo)}</div>`;
   }
-  return `<div class="menu-item"><div class="item-body"><div class="item-name">${item.nome}${badge}</div>${desc}${taglia}</div>${price}</div>`;
+  const dataFoto = item.foto ? ` data-foto="${item.foto}"` : '';
+  const dataAlg  = item.allergeni ? ` data-allergeni="${item.allergeni}"` : '';
+  return `<div class="menu-item"${dataFoto}${dataAlg}><div class="item-body"><div class="item-name">${item.nome}${badge}</div>${desc}${taglia}</div>${price}</div>`;
 }
 
 function buildSection(cat, items) {
@@ -338,13 +349,23 @@ function initExpand() {
     item.appendChild(icon);
     const expand = document.createElement('div');
     expand.className = 'item-photo-expand';
-    const label = (item.querySelector('.item-name') || {}).textContent || 'FOTO';
+    const label    = (item.querySelector('.item-name') || {}).textContent || 'FOTO';
+    const fotoUrl  = item.dataset.foto ? driveThumb(item.dataset.foto) : null;
+    const allergeni = item.dataset.allergeni || null;
     const img = document.createElement('img');
-    img.src = placeholderSvg(label.trim()); img.alt = label.trim(); img.loading = 'lazy';
+    img.src = fotoUrl || placeholderSvg(label.trim()); img.alt = label.trim(); img.loading = 'lazy';
     expand.appendChild(img);
     const alg = document.createElement('div');
     alg.className = 'item-allergens';
-    alg.innerHTML = '<span class="allergen-tag">⚠ Allergeni</span><p class="allergen-note">Le informazioni sugli allergeni di questo piatto sono in aggiornamento. Per dettagli precisi su ingredienti e allergeni, <strong style="color:var(--black)">chiedi al personale</strong> prima di ordinare.</p>';
+    const algNote = document.createElement('p');
+    algNote.className = 'allergen-note';
+    if (allergeni) {
+      algNote.textContent = allergeni;
+    } else {
+      algNote.innerHTML = 'Informazioni allergeni in aggiornamento. <strong style="color:var(--black)">Chiedi al personale</strong> prima di ordinare.';
+    }
+    alg.innerHTML = '<span class="allergen-tag">⚠ Allergeni</span>';
+    alg.appendChild(algNote);
     expand.appendChild(alg);
     item.insertAdjacentElement('afterend', expand);
 
