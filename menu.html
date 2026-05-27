@@ -37,7 +37,6 @@ nav{
   border-bottom:2px solid var(--black);
   display:flex;overflow-x:auto;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  /* impedisce drift verticale quando si swipe orizzontale sui tab */
   touch-action:pan-x;
   overscroll-behavior-x:contain;
 }
@@ -142,7 +141,6 @@ nav{
   position:relative;
   overflow:hidden;
 }
-/* pattern diagonale sottile */
 .featured::before{
   content:'';
   position:absolute;inset:0;pointer-events:none;
@@ -152,9 +150,7 @@ nav{
     rgba(0,0,0,.05) 18px,rgba(0,0,0,.05) 19px
   );
 }
-.featured-left{
-  flex:1;min-width:0;position:relative;
-}
+.featured-left{flex:1;min-width:0;position:relative;}
 .featured-badge{
   display:inline-flex;align-items:center;gap:5px;
   background:rgba(0,0,0,.25);
@@ -202,6 +198,13 @@ nav{
 .salsa-row span{font-size:15px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
 .salsa-row b{font-size:18px;font-weight:800;color:var(--red)}
 
+/* ── LOADING ── */
+.menu-loading{
+  padding:60px 18px;text-align:center;
+  font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+  color:var(--grey);opacity:.5;
+}
+
 /* ── ALLERGEN FOOTER ── */
 .allergen-footer{
   background:rgba(207,61,23,.06);
@@ -209,22 +212,12 @@ nav{
   padding:16px 22px;
   display:flex;align-items:flex-start;gap:10px;
 }
-.allergen-footer-icon{
-  font-size:18px;flex-shrink:0;margin-top:1px;
-}
-.allergen-footer-text{
-  font-size:12px;font-weight:400;color:var(--grey);
-  line-height:1.6;
-}
-.allergen-footer-text strong{
-  font-weight:800;color:var(--black);
-}
+.allergen-footer-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.allergen-footer-text{font-size:12px;font-weight:400;color:var(--grey);line-height:1.6;}
+.allergen-footer-text strong{font-weight:800;color:var(--black);}
 
 /* ── FOOTER ── */
-footer{
-  background:var(--black);color:var(--white);
-  padding:28px 22px;text-align:center;
-}
+footer{background:var(--black);color:var(--white);padding:28px 22px;text-align:center;}
 .footer-info{font-size:13px;opacity:.45;line-height:2}
 .footer-info a{color:inherit;text-decoration:none}
 
@@ -254,122 +247,7 @@ footer{
   <a class="menu-tab" href="#birre">Birre</a>
 </div>
 
-<!-- PIATTO DEL GIORNO -->
-<div class="featured">
-  <div class="featured-left">
-    <div class="featured-badge">Piatto del Giorno</div>
-    <div class="featured-name">Texas<br>Burger</div>
-    <div class="featured-desc">bun artigianale · burger 200gr<br>cheddar · bacon · insalata</div>
-  </div>
-  <div class="featured-right">
-    <div class="featured-price">10,50€</div>
-    <div class="featured-solo">Solo oggi</div>
-  </div>
-</div>
-
-<!-- SANDWICH -->
-<section class="menu-section" id="sandwich">
-  <div class="section-head"><h2>Sandwich</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Crostone</div><div class="item-desc">crudo · mozzarella · pomodoro · insalata · maionese</div></div><div class="item-price">6,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">½ Luna</div><div class="item-desc">crudo · mozzarella · insalata · pomodoro · maionese</div></div><div class="item-price">6,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">½ Luna <span style="font-size:.7em;opacity:.6">con Ventricina</span></div><div class="item-desc">ventricina · mozzarella · insalata · pomodoro · maionese</div></div><div class="item-price">7,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Ciabattina</div><div class="item-desc">crudo · mozzarella · pomodoro · insalata · maionese</div></div><div class="item-price">5,30€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Ciabattina <span style="font-size:.7em;opacity:.6">con Tonno</span></div><div class="item-desc">tonno · mozzarella · pomodoro · insalata · maionese</div></div><div class="item-price">6,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Piadina</div><div class="item-desc">crudo · mozzarella</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Piadina <span style="font-size:.7em;opacity:.6">con Ventricina</span></div><div class="item-desc">ventricina · mozzarella</div></div><div class="item-price">5,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Hot Dog</div><div class="item-desc">wrustel · insalata · pomodoro · salse</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Panino</div><div class="item-desc">salsiccia</div></div><div class="item-price">5,00€</div></div>
-</section>
-
-<!-- BURGER -->
-<section class="menu-section" id="burger">
-  <div class="section-head"><h2>Burger</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Hamburger</div><div class="item-desc">burger 100gr · pomodoro · insalata · salse</div></div><div class="item-price-multi"><span>6,50€ <small>210gr</small></span><span>14,00€ <small>340gr</small></span></div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Cheeseburger</div><div class="item-desc">burger 100gr · pomodoro · insalata · salse · cheddar</div></div><div class="item-price-multi"><span>6,50€ <small>piccolo</small></span><span>10,00€ <small>grande</small></span></div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">N 15°</div><div class="item-desc">burger 100gr · insalata · maionese · mozzarella · ventricina piccante · salsa burger</div></div><div class="item-price-multi"><span>7,00€ <small>piccolo</small></span><span>11,50€ <small>grande</small></span></div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Texas</div><div class="item-desc">bun artigianale · burger 150gr · cheddar · bacon · insalata · maionese</div></div><div class="item-price-multi"><span>5,30€ <small>piccolo</small></span><span>10,50€ <small>grande</small></span></div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Bismarck</div><div class="item-desc">bun artigianale · burger 150gr · uovo · bacon · insalata · pomodoro · salse</div></div><div class="item-price-multi"><span>6,00€ <small>piccolo</small></span><span>11,50€ <small>grande</small></span></div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Chicken Burger</div><div class="item-desc">burger di pollo fritto 200gr · insalata · pomodoro · maionese · cheddar</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Croburger</div><div class="item-desc">burger 150gr · insalata · cheddar · cipolle · maionese</div></div><div class="item-price">5,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Chick'n Bacon</div><div class="item-desc">cotoletta di pollo fritta 150gr · insalata · pomodoro · maionese · bacon · salsa segreta</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Oishi Burger</div><div class="item-desc">panino artigianale · burger di pollo fritto 200gr · salsa asiatica agrodolce · cipolle · insalata · zenzero agrodolce · fonduta di philadelphia</div></div><div class="item-price">5,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Fassona Piemontese</div><div class="item-desc">burger 200gr · pomodoro · insalata · salse</div></div><div class="item-price">5,00€</div></div>
-  <div class="salsa-row"><span>Salsa Bustina</span><b>0,30€</b></div>
-</section>
-
-<!-- SNACK -->
-<section class="menu-section" id="snack">
-  <div class="section-head"><h2>Snack</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Anelli di Cipolla</div><div class="item-size">7 pz</div></div><div class="item-price">6,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Alette di Pollo</div><div class="item-size">250gr</div></div><div class="item-price">6,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Camembert</div><div class="item-size">6 pz</div></div><div class="item-price">7,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Nuggets</div><div class="item-size">6 pz</div></div><div class="item-price">5,30€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Bastoncini di Formaggio</div><div class="item-size">5 pz</div></div><div class="item-price">6,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Crocchette di Patate</div><div class="item-size">6 pz</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Spiedini di Petto di Pollo</div><div class="item-desc">bocconcini di pollo con peperoni verdi, paprika e coriandolo</div><div class="item-size">220gr</div></div><div class="item-price">7,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Cheese Bites <span class="item-badge">NEW</span></div><div class="item-desc">bocconcini cheddar e sottoaceti</div><div class="item-size">5 pz</div></div><div class="item-price">4,00€</div></div>
-</section>
-
-<!-- FRIES -->
-<section class="menu-section" id="fries">
-  <div class="section-head"><h2>Fries</h2><span class="price-col">Price</span></div>
-  <div class="cat-head">Fries</div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Classiche</div></div><div class="item-price">3,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Rustiche</div></div><div class="item-price">4,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">BBQ</div></div><div class="item-price">4,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Cheddar</div></div><div class="item-price">4,70€</div></div>
-  <div class="cat-head">Fries Pluss</div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Patatine + Cotoletta Pollo</div><div class="item-size">150gr</div></div><div class="item-price">7,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Patatine + Wrustel</div></div><div class="item-price">5,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Patatine + Hamburger</div></div><div class="item-price">7,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Patatine + Maxi Schnitzel Pollo</div><div class="item-size">250gr</div></div><div class="item-price">8,90€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Patatine + Maxi Schnitzel Maiale</div><div class="item-size">250gr</div></div><div class="item-price">9,50€</div></div>
-</section>
-
-<!-- TEX-MEX -->
-<section class="menu-section" id="texmex">
-  <div class="section-head"><h2>Tex-Mex</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Mexo Burger</div><div class="item-desc">salsa guacamole · cheddar · jalapeno · insalata · salsa dip mex · burger 200gr · carote alla messicana</div></div><div class="item-price">11,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Hot Dog Mex</div><div class="item-desc">wrustel · jalapeno · cheddar · pomodoro · insalata · salse</div></div><div class="item-price">5,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Maxi Mex</div><div class="item-desc">straccetti di petto di pollo arrosto · insalata · pomodoro · jalapeno · maionese</div></div><div class="item-price">7,80€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Burrito</div><div class="item-desc">manzo · cheddar · insalata · jalapeno · salsa messicana con fagioli e mais</div></div><div class="item-price">7,80€</div></div>
-  <div class="cat-head">Extras Mex</div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Avocat Su</div><div class="item-desc">bocconcini di avocado impanati e fritti</div><div class="item-size">6 pz</div></div><div class="item-price">4,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Habanero</div><div class="item-desc">habanero ripieno di formaggio</div><div class="item-size">6 pz</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Nachos</div><div class="item-desc">triangoli ripieni di cheddar e peperoni</div><div class="item-size">6 pz</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Jalapeno</div><div class="item-desc">jalapeno ripieni di formaggio</div><div class="item-size">5 pz</div></div><div class="item-price">6,00€</div></div>
-</section>
-
-<!-- COCKTAIL -->
-<section class="menu-section" id="cocktail">
-  <div class="section-head"><h2>Cocktail</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Spritz</div><div class="item-desc">aperol · prosecco · seltz · arancia</div></div><div class="item-price">—</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Mojito</div><div class="item-desc">rum · menta · lime · zucchero · seltz</div></div><div class="item-price">—</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Negroni</div><div class="item-desc">gin · campari · vermouth rosso</div></div><div class="item-price">—</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Hugo</div><div class="item-desc">prosecco · sciroppo di sambuco · menta · seltz</div></div><div class="item-price">—</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Gin Tonic</div><div class="item-desc">gin · acqua tonica · lime</div></div><div class="item-price">—</div></div>
-</section>
-
-<!-- BEVANDE -->
-<section class="menu-section" id="bevande">
-  <div class="section-head"><h2>Bevande</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Acqua</div></div><div class="item-price">1,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Bibita Lattina</div></div><div class="item-price">2,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Red Bull</div></div><div class="item-price">3,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Ginger Beer</div></div><div class="item-price">3,50€</div></div>
-</section>
-
-<!-- BIRRE -->
-<section class="menu-section" id="birre">
-  <div class="section-head"><h2>Birre</h2><span class="price-col">Price</span></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Peroni</div><div class="item-size">33 cl</div></div><div class="item-price">3,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Peroni</div><div class="item-size">66 cl</div></div><div class="item-price">4,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Menabrea</div><div class="item-size">33 cl</div></div><div class="item-price">3,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Beck's</div><div class="item-size">33 cl</div></div><div class="item-price">3,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Heineken</div><div class="item-size">33 cl</div></div><div class="item-price">3,50€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Bjorne</div><div class="item-size">33 cl</div></div><div class="item-price">3,00€</div></div>
-  <div class="menu-item"><div class="item-body"><div class="item-name">Tennentes</div><div class="item-size">33 cl</div></div><div class="item-price">3,50€</div></div>
-</section>
+<div id="menu-root"><div class="menu-loading">Caricamento menu…</div></div>
 
 <div class="allergen-footer">
   <span class="allergen-footer-icon">⚠️</span>
@@ -389,69 +267,130 @@ footer{
 </footer>
 
 <script>
-// Active tab scroll spy
-const tabs = document.querySelectorAll('.menu-tab');
-const sections = document.querySelectorAll('.menu-section');
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if(e.isIntersecting){
-      tabs.forEach(t => t.classList.remove('active'));
-      const a = document.querySelector(`.menu-tab[href="#${e.target.id}"]`);
-      if(a){ a.classList.add('active'); a.scrollIntoView({block:'nearest',inline:'center'}); }
-    }
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_xyTVoQibWn-ejnu3Xr1rDLq8AzFkQVLIl2h1xB0dB_sEP3-MvRNFMdyEAbSxWzE_/exec';
+
+const CATS = [
+  { id:'sandwich', label:'Sandwich' },
+  { id:'burger',   label:'Burger' },
+  { id:'snack',    label:'Snack' },
+  { id:'fries',    label:'Fries' },
+  { id:'texmex',   label:'Tex-Mex' },
+  { id:'cocktail', label:'Cocktail' },
+  { id:'bevande',  label:'Bevande' },
+  { id:'birre',    label:'Birre' },
+];
+
+function fmt(p) {
+  if (!p || p === '—') return '—';
+  const n = parseFloat(p);
+  if (isNaN(n)) return p;
+  return n.toFixed(2).replace('.', ',') + '€';
+}
+
+function buildItem(item) {
+  if (item.tipo === 'salsa') {
+    return `<div class="salsa-row"><span>${item.nome}</span><b>${fmt(item.prezzo)}</b></div>`;
+  }
+  const badge  = item.badge ? `<span class="item-badge">${item.badge}</span>` : '';
+  const desc   = item.ingredienti ? `<div class="item-desc">${item.ingredienti}</div>` : '';
+  const taglia = item.taglia ? `<div class="item-size">${item.taglia}</div>` : '';
+  let price;
+  if (item.prezzo2) {
+    price = `<div class="item-price-multi"><span>${fmt(item.prezzo)} <small>${item.label1}</small></span><span>${fmt(item.prezzo2)} <small>${item.label2}</small></span></div>`;
+  } else {
+    price = `<div class="item-price">${fmt(item.prezzo)}</div>`;
+  }
+  return `<div class="menu-item"><div class="item-body"><div class="item-name">${item.nome}${badge}</div>${desc}${taglia}</div>${price}</div>`;
+}
+
+function buildSection(cat, items) {
+  const catItems = items.filter(i => i.categoria.toLowerCase() === cat.id);
+  if (!catItems.length) return '';
+  const groups = {}, order = [];
+  catItems.forEach(item => {
+    const sub = item.sottocategoria || '';
+    if (!groups[sub]) { groups[sub] = []; order.push(sub); }
+    groups[sub].push(item);
   });
-}, {rootMargin:'-20% 0px -70% 0px'});
-sections.forEach(s => obs.observe(s));
+  let html = `<section class="menu-section" id="${cat.id}"><div class="section-head"><h2>${cat.label}</h2><span class="price-col">Price</span></div>`;
+  order.forEach(sub => {
+    if (sub) html += `<div class="cat-head">${sub}</div>`;
+    html += groups[sub].map(buildItem).join('');
+  });
+  return html + '</section>';
+}
 
-// Photo expand
-const placeholderSvg = (label) => {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><rect width="600" height="200" fill="#CF3D17"/><rect x="40" y="30" width="520" height="140" fill="none" stroke="#FCFAF6" stroke-width="1.5" stroke-dasharray="8 4" opacity="0.35"/><text x="300" y="90" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="16" fill="#FCFAF6" letter-spacing="4">FOTO IN ARRIVO</text><text x="300" y="125" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="13" fill="#FCFAF6" letter-spacing="2" opacity="0.55">${label.toUpperCase().slice(0,28)}</text></svg>`;
-  return 'data:image/svg+xml,' + encodeURIComponent(svg);
-};
-document.querySelectorAll('.menu-item').forEach(item => {
-  const icon = document.createElement('span');
-  icon.className='expand-icon'; icon.setAttribute('aria-hidden','true'); icon.textContent='▾';
-  item.appendChild(icon);
-  const expand = document.createElement('div');
-  expand.className='item-photo-expand';
-  const label = (item.querySelector('.item-name')||{}).textContent||'FOTO';
-  const img = document.createElement('img');
-  img.src=placeholderSvg(label.trim()); img.alt=label.trim(); img.loading='lazy';
-  expand.appendChild(img);
-  // allergeni placeholder
-  const alg = document.createElement('div');
-  alg.className = 'item-allergens';
-  alg.innerHTML = '<span class="allergen-tag">⚠ Allergeni</span><p class="allergen-note">Le informazioni sugli allergeni di questo piatto sono in aggiornamento. Per dettagli precisi su ingredienti e allergeni, <strong style="color:var(--black)">chiedi al personale</strong> prima di ordinare.</p>';
-  expand.appendChild(alg);
-  item.insertAdjacentElement('afterend', expand);
+function buildFeatured(pdg) {
+  if (!pdg) return '';
+  return `<div class="featured"><div class="featured-left"><div class="featured-badge">Piatto del Giorno</div><div class="featured-name">${pdg.nome}</div><div class="featured-desc">${pdg.ingredienti}</div></div><div class="featured-right"><div class="featured-price">${fmt(pdg.prezzo)}</div><div class="featured-solo">Solo oggi</div></div></div>`;
+}
 
-  const toggle=()=>{
-    const open=expand.classList.contains('open');
-    document.querySelectorAll('.item-photo-expand.open').forEach(e=>e.classList.remove('open'));
-    document.querySelectorAll('.menu-item.photo-open').forEach(m=>m.classList.remove('photo-open'));
-    if(!open){ expand.classList.add('open'); item.classList.add('photo-open'); setTimeout(()=>expand.scrollIntoView({behavior:'smooth',block:'nearest'}),100); }
+function initExpand() {
+  const placeholderSvg = (label) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><rect width="600" height="200" fill="#CF3D17"/><rect x="40" y="30" width="520" height="140" fill="none" stroke="#FCFAF6" stroke-width="1.5" stroke-dasharray="8 4" opacity="0.35"/><text x="300" y="90" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="16" fill="#FCFAF6" letter-spacing="4">FOTO IN ARRIVO</text><text x="300" y="125" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="13" fill="#FCFAF6" letter-spacing="2" opacity="0.55">${label.toUpperCase().slice(0,28)}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
   };
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const icon = document.createElement('span');
+    icon.className = 'expand-icon'; icon.setAttribute('aria-hidden','true'); icon.textContent = '▾';
+    item.appendChild(icon);
+    const expand = document.createElement('div');
+    expand.className = 'item-photo-expand';
+    const label = (item.querySelector('.item-name') || {}).textContent || 'FOTO';
+    const img = document.createElement('img');
+    img.src = placeholderSvg(label.trim()); img.alt = label.trim(); img.loading = 'lazy';
+    expand.appendChild(img);
+    const alg = document.createElement('div');
+    alg.className = 'item-allergens';
+    alg.innerHTML = '<span class="allergen-tag">⚠ Allergeni</span><p class="allergen-note">Le informazioni sugli allergeni di questo piatto sono in aggiornamento. Per dettagli precisi su ingredienti e allergeni, <strong style="color:var(--black)">chiedi al personale</strong> prima di ordinare.</p>';
+    expand.appendChild(alg);
+    item.insertAdjacentElement('afterend', expand);
 
-  // Touch: apri solo se il dito non si è mosso (tap, non scroll)
-  let t0x=0, t0y=0, isTap=false;
-  item.addEventListener('touchstart', e=>{
-    t0x = e.touches[0].clientX;
-    t0y = e.touches[0].clientY;
-    isTap = true;
-  }, {passive:true});
-  item.addEventListener('touchmove', e=>{
-    const dx = Math.abs(e.touches[0].clientX - t0x);
-    const dy = Math.abs(e.touches[0].clientY - t0y);
-    if(dx > 8 || dy > 8) isTap = false; // si è mosso → non è un tap
-  }, {passive:true});
-  item.addEventListener('touchend', e=>{
-    if(isTap){ e.preventDefault(); toggle(); }
-    isTap = false;
-  }, {passive:false});
+    const toggle = () => {
+      const open = expand.classList.contains('open');
+      document.querySelectorAll('.item-photo-expand.open').forEach(e => e.classList.remove('open'));
+      document.querySelectorAll('.menu-item.photo-open').forEach(m => m.classList.remove('photo-open'));
+      if (!open) { expand.classList.add('open'); item.classList.add('photo-open'); setTimeout(() => expand.scrollIntoView({behavior:'smooth',block:'nearest'}), 100); }
+    };
+    let t0x = 0, t0y = 0, isTap = false;
+    item.addEventListener('touchstart', e => { t0x = e.touches[0].clientX; t0y = e.touches[0].clientY; isTap = true; }, {passive:true});
+    item.addEventListener('touchmove',  e => { if (Math.abs(e.touches[0].clientX-t0x) > 8 || Math.abs(e.touches[0].clientY-t0y) > 8) isTap = false; }, {passive:true});
+    item.addEventListener('touchend',   e => { if (isTap) { e.preventDefault(); toggle(); } isTap = false; }, {passive:false});
+    item.addEventListener('click', toggle);
+  });
+}
 
-  // Click desktop
-  item.addEventListener('click', toggle);
-});
+function initScrollSpy() {
+  const tabs = document.querySelectorAll('.menu-tab');
+  const sections = document.querySelectorAll('.menu-section');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tabs.forEach(t => t.classList.remove('active'));
+        const a = document.querySelector(`.menu-tab[href="#${e.target.id}"]`);
+        if (a) { a.classList.add('active'); a.scrollIntoView({block:'nearest',inline:'center'}); }
+      }
+    });
+  }, {rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(s => obs.observe(s));
+}
+
+async function loadMenu() {
+  const root = document.getElementById('menu-root');
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+    let html = buildFeatured(data.piatto_del_giorno);
+    CATS.forEach(cat => { html += buildSection(cat, data.menu); });
+    root.innerHTML = html;
+    initExpand();
+    initScrollSpy();
+  } catch(e) {
+    root.innerHTML = '<p style="padding:40px 18px;color:var(--grey);font-size:14px;font-weight:600;letter-spacing:1px">Menu temporaneamente non disponibile.<br>Chiedi al personale.</p>';
+  }
+}
+
+loadMenu();
 </script>
 </body>
 </html>
