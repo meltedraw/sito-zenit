@@ -131,6 +131,75 @@ nav{
   line-height:1.55;
 }
 
+/* ── PIATTO DEL GIORNO ── */
+.featured{
+  background:var(--black);
+  color:var(--white);
+  margin:0;
+  position:relative;
+  overflow:hidden;
+}
+.featured-photo{
+  width:100%;height:200px;
+  object-fit:cover;
+  display:block;
+  filter:brightness(.75);
+}
+/* placeholder SVG finché non c'è la foto vera */
+.featured-photo-placeholder{
+  width:100%;height:200px;
+  background:var(--red);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.featured-photo-placeholder::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent,transparent 20px,
+    rgba(0,0,0,.07) 20px,rgba(0,0,0,.07) 21px
+  );
+}
+.featured-photo-placeholder span{
+  position:relative;
+  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+}
+.featured-body{
+  padding:18px 18px 22px;
+}
+.featured-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--red);color:var(--white);
+  font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  padding:4px 12px;margin-bottom:14px;
+}
+.featured-badge::before{content:'★';font-size:9px}
+.featured-name{
+  font-size:clamp(32px,9vw,48px);font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;line-height:.95;
+  margin-bottom:8px;
+}
+.featured-desc{
+  font-size:14px;font-weight:400;
+  color:rgba(255,255,255,.55);
+  line-height:1.5;margin-bottom:16px;
+}
+.featured-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.featured-price{
+  font-size:clamp(32px,9vw,44px);font-weight:800;
+  color:var(--red);line-height:1;
+}
+.featured-tag{
+  font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,.25);text-align:right;line-height:1.4;
+}
+
 /* ── CAT HEAD & SALSA ── */
 .cat-head{
   display:inline-block;background:var(--red);color:var(--white);
@@ -194,6 +263,22 @@ footer{
   <a class="menu-tab" href="#cocktail">Cocktail</a>
   <a class="menu-tab" href="#bevande">Bevande</a>
   <a class="menu-tab" href="#birre">Birre</a>
+</div>
+
+<!-- PIATTO DEL GIORNO -->
+<div class="featured">
+  <div class="featured-photo-placeholder">
+    <span>Foto piatto del giorno</span>
+  </div>
+  <div class="featured-body">
+    <div class="featured-badge">Oggi</div>
+    <div class="featured-name">Texas<br>Burger</div>
+    <div class="featured-desc">bun artigianale · burger 200gr · cheddar · bacon · insalata · maionese</div>
+    <div class="featured-footer">
+      <div class="featured-price">10,50€</div>
+      <div class="featured-tag">Solo<br>Oggi</div>
+    </div>
+  </div>
 </div>
 
 <!-- SANDWICH -->
