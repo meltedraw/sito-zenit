@@ -313,7 +313,7 @@ function buildItem(item) {
   }
   const dataFoto = item.foto ? ` data-foto="${item.foto}"` : '';
   const dataAlg  = item.allergeni ? ` data-allergeni="${item.allergeni}"` : '';
-  return `<div class="menu-item"${dataFoto}${dataAlg}><div class="item-body"><div class="item-name">${item.nome}${badge}</div>${desc}${taglia}</div>${price}</div>`;
+  return `<div class="menu-item" data-cat="${item.categoria}"${dataFoto}${dataAlg}><div class="item-body"><div class="item-name">${item.nome}${badge}</div>${desc}${taglia}</div>${price}</div>`;
 }
 
 function buildSection(cat, items) {
@@ -343,7 +343,9 @@ function initExpand() {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><rect width="600" height="200" fill="#CF3D17"/><rect x="40" y="30" width="520" height="140" fill="none" stroke="#FCFAF6" stroke-width="1.5" stroke-dasharray="8 4" opacity="0.35"/><text x="300" y="90" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="16" fill="#FCFAF6" letter-spacing="4">FOTO IN ARRIVO</text><text x="300" y="125" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="13" fill="#FCFAF6" letter-spacing="2" opacity="0.55">${label.toUpperCase().slice(0,28)}</text></svg>`;
     return 'data:image/svg+xml,' + encodeURIComponent(svg);
   };
+  const NO_EXPAND = ['cocktail', 'bevande', 'birre'];
   document.querySelectorAll('.menu-item').forEach(item => {
+    if (NO_EXPAND.includes(item.dataset.cat)) return;
     const icon = document.createElement('span');
     icon.className = 'expand-icon'; icon.setAttribute('aria-hidden','true'); icon.textContent = '▾';
     item.appendChild(icon);
