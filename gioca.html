@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Attesa — Bar Zenit Pub</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#CF3D17;--white:#FCFAF6;--black:#1a1a1a;--nav-h:54px}
+html,body{height:100%;overflow:hidden;touch-action:none}
+body{
+  font-family:'Barlow Condensed',sans-serif;
+  background:var(--black);color:var(--white);
+  display:flex;flex-direction:column;
+  height:100svh;
+}
+
+/* ── NAV ── */
+nav{
+  flex:0 0 var(--nav-h);
+  background:var(--black);
+  border-bottom:2px solid rgba(255,255,255,.1);
+  display:grid;grid-template-columns:var(--nav-h) 1fr var(--nav-h);
+  align-items:center;
+  z-index:10;
+}
+.nav-back{
+  display:flex;align-items:center;justify-content:center;
+  width:var(--nav-h);height:var(--nav-h);
+  text-decoration:none;color:var(--white);font-size:22px;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-title{text-align:center;font-size:12px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:.6}
+.nav-spacer{width:var(--nav-h)}
+
+/* ── GAME WRAPPER ── */
+.game-wrap{
+  flex:1;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+canvas{
+  display:block;
+  touch-action:none;
+  cursor:none;
+}
+
+/* ── OVERLAY SCREENS ── */
+.overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(26,26,26,.92);
+  text-align:center;padding:24px;
+  z-index:5;
+}
+.overlay.hidden{display:none}
+.overlay h2{
+  font-size:clamp(32px,10vw,56px);font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;
+  line-height:1;margin-bottom:12px;
+}
+.overlay h2 span{color:var(--red)}
+.overlay p{
+  font-size:15px;font-weight:400;opacity:.6;
+  margin-bottom:28px;line-height:1.5;
+}
+.overlay .score-display{
+  font-size:clamp(48px,14vw,80px);font-weight:800;
+  color:var(--red);line-height:1;margin-bottom:8px;
+}
+.overlay .score-label{
+  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:.4;margin-bottom:28px;
+}
+.btn-start{
+  background:var(--red);color:var(--white);
+  border:none;font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  padding:16px 40px;cursor:pointer;
+  transition:background .15s,transform .1s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-start:active{background:#b03210;transform:scale(0.97)}
+
+/* ── HUD ── */
+.hud{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 16px;
+  pointer-events:none;
+  z-index:4;
+}
+.hud-item{
+  font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  opacity:.7;
+}
+.hud-score{color:var(--red);font-size:16px;opacity:1}
+
+/* ── MOBILE TOUCH CONTROL ── */
+.touch-zone{
+  position:absolute;bottom:0;left:0;right:0;height:80px;
+  z-index:3;
+  display:none;
+}
+@media(pointer:coarse){.touch-zone{display:block}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html" id="backBtn" aria-label="Torna alla home">&#8592;</a>
+  <div class="nav-title">Breakout · Zenit</div>
+  <div class="nav-spacer"></div>
+</nav>
+
+<div class="game-wrap" id="gameWrap">
+  <canvas id="canvas"></canvas>
+
+  <div class="hud" id="hud">
+    <span class="hud-item" id="hudLives">❤️❤️❤️</span>
+    <span class="hud-item hud-score" id="hudScore">0</span>
+    <span class="hud-item" id="hudLevel">LV 1</span>
+  </div>
+
+  <!-- START SCREEN -->
+  <div class="overlay" id="startScreen">
+    <h2>Breakout<br><span>Zenit</span></h2>
+    <p>Rompi tutti i blocchi.<br>Muovi la racchetta con il dito o il mouse.</p>
+    <button class="btn-start" id="btnStart">Inizia</button>
+  </div>
+
+  <!-- GAME OVER -->
+  <div class="overlay hidden" id="gameOverScreen">
+    <h2>Game<br><span>Over</span></h2>
+    <div class="score-display" id="finalScore">0</div>
+    <div class="score-label">punti</div>
+    <button class="btn-start" id="btnRestart">Rigioca</button>
+  </div>
+
+  <!-- WIN SCREEN -->
+  <div class="overlay hidden" id="winScreen">
+    <h2>🍔<br><span>Bravo!</span></h2>
+    <p>Hai distrutto tutto.<br>Il tuo ordine è quasi pronto!</p>
+    <div class="score-display" id="winScore">0</div>
+    <div class="score-label">punti</div>
+    <button class="btn-start" id="btnNext">Prossimo livello</button>
+  </div>
+
+  <div class="touch-zone" id="touchZone"></div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('gameWrap');
+
+// ── PALETTE ──
+const C = {
+  bg:     '#1a1a1a',
+  red:    '#CF3D17',
+  white:  '#FCFAF6',
+  grey:   '#3a3a3a',
+  dark:   '#2a2a2a',
+};
+
+// ── STATE ──
+let W, H, dpr;
+let state = 'start'; // start | playing | over | win
+let score = 0, lives = 3, level = 1;
+let paddle, ball, bricks, particles;
+let animId;
+let touchX = null;
+
+// ── RESIZE ──
+function resize(){
+  const rect = wrap.getBoundingClientRect();
+  W = rect.width;
+  H = rect.height;
+  dpr = window.devicePixelRatio || 1;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+  if(state === 'playing') initLevel(false);
+}
+
+// ── PADDLE ──
+function makePaddle(){
+  const pw = Math.min(100, W * 0.28);
+  return {
+    w: pw, h: 10,
+    x: W/2 - pw/2,
+    y: H - 36,
+    speed: 0,
+  };
+}
+
+// ── BALL ──
+function makeBall(){
+  const spd = 4 + level * 0.5;
+  return {
+    x: W/2, y: H/2,
+    r: 7,
+    vx: spd * (Math.random() > .5 ? 1 : -1),
+    vy: -spd,
+    launched: false,
+  };
+}
+
+// ── BRICKS ──
+const BRICK_ROWS = 5;
+const BRICK_COLS = 8;
+const BRICK_PAD  = 4;
+
+function makeBricks(){
+  const bw = (W - BRICK_PAD * (BRICK_COLS + 1)) / BRICK_COLS;
+  const bh = 20;
+  const offsetY = 70;
+  const palette = [C.red, '#e04a22', '#b03210', '#922a0e', '#7a2008'];
+  const bricks = [];
+  for(let r = 0; r < BRICK_ROWS; r++){
+    for(let c = 0; c < BRICK_COLS; c++){
+      bricks.push({
+        x: BRICK_PAD + c * (bw + BRICK_PAD),
+        y: offsetY + r * (bh + BRICK_PAD),
+        w: bw, h: bh,
+        alive: true,
+        color: palette[r],
+        pts: (BRICK_ROWS - r) * 10,
+      });
+    }
+  }
+  return bricks;
+}
+
+// ── PARTICLES ──
+function spawnParticles(x, y, color){
+  for(let i = 0; i < 8; i++){
+    const angle = Math.random() * Math.PI * 2;
+    const spd   = 2 + Math.random() * 4;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      life: 1,
+      decay: 0.04 + Math.random() * 0.04,
+      r: 2 + Math.random() * 3,
+      color,
+    });
+  }
+}
+
+// ── INIT ──
+function initLevel(resetScore){
+  if(resetScore){ score = 0; lives = 3; level = 1; }
+  paddle = makePaddle();
+  ball   = makeBall();
+  bricks = makeBricks();
+  particles = [];
+  updateHUD();
+}
+
+function updateHUD(){
+  document.getElementById('hudScore').textContent = score;
+  document.getElementById('hudLevel').textContent = 'LV ' + level;
+  const h = ['❤️','❤️','❤️'].slice(0, lives).join('') || '💀';
+  document.getElementById('hudLives').textContent = h;
+}
+
+// ── DRAW ──
+function drawBrick(b){
+  ctx.fillStyle = b.color;
+  ctx.fillRect(b.x, b.y, b.w, b.h);
+  // shine
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  ctx.fillRect(b.x, b.y, b.w, 4);
+}
+
+function drawPaddle(){
+  ctx.fillStyle = C.white;
+  ctx.beginPath();
+  ctx.roundRect ? ctx.roundRect(paddle.x, paddle.y, paddle.w, paddle.h, 5)
+                : ctx.rect(paddle.x, paddle.y, paddle.w, paddle.h);
+  ctx.fill();
+  // red center line
+  ctx.fillStyle = C.red;
+  ctx.fillRect(paddle.x + paddle.w/2 - 16, paddle.y + 3, 32, 4);
+}
+
+function drawBall(){
+  // glow
+  const g = ctx.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,ball.r*3);
+  g.addColorStop(0,'rgba(207,61,23,0.3)');
+  g.addColorStop(1,'rgba(207,61,23,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.r*3, 0, Math.PI*2);
+  ctx.fill();
+  // ball
+  ctx.fillStyle = C.white;
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function drawParticles(){
+  particles.forEach(p => {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+// ── LOOP ──
+function loop(){
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // grid lines subtle
+  ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+  ctx.lineWidth = 1;
+  for(let x = 0; x < W; x += 40){ ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke(); }
+  for(let y = 0; y < H; y += 40){ ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke(); }
+
+  if(state !== 'playing'){ animId = requestAnimationFrame(loop); return; }
+
+  // particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.1;
+    p.life -= p.decay;
+  });
+  particles = particles.filter(p => p.life > 0);
+
+  // paddle follow mouse / touch
+  if(touchX !== null){
+    paddle.x = touchX - paddle.w/2;
+  }
+  paddle.x = Math.max(0, Math.min(W - paddle.w, paddle.x));
+
+  // ball
+  if(!ball.launched){
+    ball.x = paddle.x + paddle.w/2;
+    ball.y = paddle.y - ball.r - 2;
+  } else {
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    // walls
+    if(ball.x - ball.r < 0){ ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
+    if(ball.x + ball.r > W){ ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
+    if(ball.y - ball.r < 0){ ball.y = ball.r; ball.vy = Math.abs(ball.vy); }
+
+    // paddle collision
+    if(
+      ball.vy > 0 &&
+      ball.y + ball.r >= paddle.y &&
+      ball.y - ball.r <= paddle.y + paddle.h &&
+      ball.x >= paddle.x &&
+      ball.x <= paddle.x + paddle.w
+    ){
+      ball.vy = -Math.abs(ball.vy);
+      // angle based on hit position
+      const hitPos = (ball.x - (paddle.x + paddle.w/2)) / (paddle.w/2);
+      ball.vx = hitPos * (4 + level * 0.5);
+      spawnParticles(ball.x, paddle.y, C.white);
+    }
+
+    // out of bounds
+    if(ball.y - ball.r > H){
+      lives--;
+      updateHUD();
+      if(lives <= 0){
+        state = 'over';
+        document.getElementById('finalScore').textContent = score;
+        document.getElementById('gameOverScreen').classList.remove('hidden');
+        return;
+      }
+      ball = makeBall();
+    }
+
+    // brick collision
+    bricks.forEach(b => {
+      if(!b.alive) return;
+      if(
+        ball.x + ball.r > b.x && ball.x - ball.r < b.x + b.w &&
+        ball.y + ball.r > b.y && ball.y - ball.r < b.y + b.h
+      ){
+        b.alive = false;
+        ball.vy *= -1;
+        score += b.pts;
+        updateHUD();
+        spawnParticles(b.x + b.w/2, b.y + b.h/2, b.color);
+      }
+    });
+
+    // check win
+    if(bricks.every(b => !b.alive)){
+      state = 'win';
+      document.getElementById('winScore').textContent = score;
+      document.getElementById('winScreen').classList.remove('hidden');
+      return;
+    }
+  }
+
+  // draw
+  drawParticles();
+  bricks.filter(b => b.alive).forEach(drawBrick);
+  drawPaddle();
+  drawBall();
+
+  animId = requestAnimationFrame(loop);
+}
+
+// ── INPUT ──
+// Mouse
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  touchX = e.clientX - rect.left;
+});
+canvas.addEventListener('click', () => { if(!ball.launched) ball.launched = true; });
+
+// Touch
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  touchX = e.touches[0].clientX - rect.left;
+}, {passive:false});
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  touchX = e.touches[0].clientX - rect.left;
+  if(!ball.launched) ball.launched = true;
+}, {passive:false});
+canvas.addEventListener('touchend', () => { /* keep last touchX */ }, {passive:true});
+
+// Touch zone (bottom bar)
+const tz = document.getElementById('touchZone');
+tz.addEventListener('touchmove', e => {
+  e.preventDefault();
+  touchX = e.touches[0].clientX;
+}, {passive:false});
+tz.addEventListener('touchstart', e => {
+  e.preventDefault();
+  touchX = e.touches[0].clientX;
+  if(!ball.launched) ball.launched = true;
+}, {passive:false});
+
+// Buttons
+document.getElementById('btnStart').addEventListener('click', () => {
+  document.getElementById('startScreen').classList.add('hidden');
+  initLevel(true);
+  state = 'playing';
+  if(!animId) loop();
+});
+document.getElementById('btnRestart').addEventListener('click', () => {
+  document.getElementById('gameOverScreen').classList.add('hidden');
+  initLevel(true);
+  state = 'playing';
+});
+document.getElementById('btnNext').addEventListener('click', () => {
+  document.getElementById('winScreen').classList.add('hidden');
+  level++;
+  initLevel(false);
+  state = 'playing';
+});
+
+// Back button — pause if playing
+document.getElementById('backBtn').addEventListener('click', e => {
+  if(state === 'playing'){
+    e.preventDefault();
+    state = 'paused';
+    if(confirm('Vuoi uscire dal gioco?')) window.location.href = 'index.html';
+    else state = 'playing';
+  }
+});
+
+// Start loop (renders overlays too)
+window.addEventListener('resize', resize);
+resize();
+loop();
+</script>
+</body>
+</html>

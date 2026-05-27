@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi Siamo — Bar Zenit Pub</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#CF3D17;--white:#FCFAF6;--black:#1a1a1a;--grey:#7a7a7a;--nav-h:54px}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow Condensed',sans-serif;background:var(--white);color:var(--black);padding-top:var(--nav-h)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:var(--nav-h);background:var(--white);
+  border-bottom:2px solid var(--black);
+  display:grid;grid-template-columns:var(--nav-h) 1fr var(--nav-h);
+  align-items:center;
+}
+.nav-back{
+  display:flex;align-items:center;justify-content:center;
+  width:var(--nav-h);height:var(--nav-h);
+  text-decoration:none;color:var(--black);
+  font-size:22px;
+  transition:color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-back:active{color:var(--red)}
+.nav-title{
+  text-align:center;
+  font-size:13px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+}
+.nav-spacer{width:var(--nav-h)}
+
+/* ── HERO ── */
+.page-hero{
+  background:var(--red);color:var(--white);
+  padding:56px 24px 48px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.page-hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent,transparent 20px,
+    rgba(0,0,0,0.04) 20px,rgba(0,0,0,0.04) 21px
+  );
+}
+.page-hero h1{
+  position:relative;
+  font-size:clamp(40px,12vw,72px);font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;line-height:.95;
+  margin-bottom:16px;
+}
+.page-hero p{
+  position:relative;
+  font-size:clamp(14px,4vw,17px);font-weight:400;
+  opacity:.85;line-height:1.5;max-width:480px;margin:0 auto;
+}
+.est-stamp{
+  position:relative;
+  display:inline-block;
+  border:2px solid rgba(255,255,255,.4);
+  font-size:11px;font-weight:800;letter-spacing:6px;text-transform:uppercase;
+  padding:6px 20px;margin-top:20px;opacity:.7;
+}
+
+/* ── STORY ── */
+.story{padding:40px 22px 48px}
+.story-block{margin-bottom:32px}
+.story-year{
+  display:inline-block;
+  background:var(--red);color:var(--white);
+  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  padding:3px 12px;margin-bottom:10px;
+}
+.story-block h3{
+  font-size:clamp(22px,6vw,28px);font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:8px;line-height:1.1;
+}
+.story-block p{
+  font-size:15px;font-weight:400;color:var(--grey);
+  line-height:1.65;
+}
+.story-divider{
+  width:100%;height:1px;background:rgba(0,0,0,0.08);
+  margin:32px 0;
+}
+
+/* valori */
+.values{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;background:var(--black);
+  border:2px solid var(--black);
+  margin:0 0 40px;
+}
+.value-item{
+  background:var(--white);
+  padding:20px 16px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.value-icon{font-size:28px;line-height:1}
+.value-label{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
+.value-desc{font-size:12px;font-weight:400;color:var(--grey);line-height:1.4}
+
+/* ── RECENSIONI ── */
+.reviews-section{
+  background:var(--black);color:var(--white);
+  padding:40px 22px 48px;
+}
+.section-label{
+  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  opacity:.4;margin-bottom:6px;
+}
+.section-title{
+  font-size:clamp(28px,9vw,48px);font-weight:800;
+  text-transform:uppercase;letter-spacing:1.5px;line-height:1;
+  margin-bottom:4px;
+}
+.ta-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);text-decoration:none;
+  margin-bottom:28px;
+}
+.review-card{
+  padding:22px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.review-card:last-child{border-bottom:none}
+.review-stars{font-size:15px;letter-spacing:2px;color:var(--red);margin-bottom:6px}
+.review-title{
+  font-size:clamp(17px,5vw,21px);font-weight:800;
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;line-height:1.1;
+}
+.review-text{
+  font-size:14px;font-weight:400;line-height:1.65;
+  opacity:.72;margin-bottom:10px;
+}
+.review-meta{
+  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.35;
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--black);color:var(--white);
+  padding:32px 22px;text-align:center;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer-info{font-size:13px;opacity:.5;line-height:2}
+.footer-info a{color:inherit;text-decoration:none}
+
+@media(min-width:768px){
+  .story,.reviews-section{max-width:700px;margin:0 auto;width:100%}
+  .reviews-section{background:var(--black);max-width:100%;padding:40px 0 48px}
+  .reviews-section > *{max-width:700px;margin-left:auto;margin-right:auto;padding-left:22px;padding-right:22px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html" aria-label="Torna alla home">&#8592;</a>
+  <div class="nav-title">Chi Siamo</div>
+  <div class="nav-spacer"></div>
+</nav>
+
+<div class="page-hero">
+  <h1>Dal 1996<br>siamo qui.</h1>
+  <p>Ateleta, provincia de L'Aquila. Un bar, un pub, una cucina — e trent'anni di gente che torna.</p>
+  <div class="est-stamp">Est. 1996</div>
+</div>
+
+<div class="story">
+
+  <div class="story-block">
+    <div class="story-year">Le origini</div>
+    <h3>Nasce lo Zenit</h3>
+    <p>Era il 1996 quando il Bar Zenit aprì le porte nel cuore di Ateleta. In un paese di montagna dell'Abruzzo, dove la vita scorre lenta e i sapori sono quelli veri, lo Zenit diventa subito il punto di ritrovo del paese — per chi cerca un caffè al mattino, un panino la sera, o semplicemente un posto dove stare.</p>
+  </div>
+
+  <div class="story-divider"></div>
+
+  <div class="story-block">
+    <div class="story-year">La cucina</div>
+    <h3>Burger che parlano chiaro</h3>
+    <p>Negli anni il menu si evolve. I burger diventano il cuore del locale — carne selezionata, ingredienti freschi, ricette che portano il nome del posto: il N15°, il Texas, il Bismarck. Ogni panino ha una storia. Ogni cliente ne porta via una.</p>
+  </div>
+
+  <div class="story-divider"></div>
+
+  <div class="story-block">
+    <div class="story-year">Oggi</div>
+    <h3>Un posto vero</h3>
+    <p>Trent'anni dopo, lo Zenit è ancora lì. Stesse mani, stessa passione. Il locale è cambiato, il menu si è allargato — ma l'anima è rimasta quella di sempre: un posto dove si mangia bene, si beve meglio, e ci si sente a casa.</p>
+  </div>
+
+  <div class="story-divider"></div>
+
+  <div class="values">
+    <div class="value-item">
+      <span class="value-icon">🥩</span>
+      <span class="value-label">Qualità</span>
+      <span class="value-desc">Ingredienti freschi, ricette collaudate</span>
+    </div>
+    <div class="value-item">
+      <span class="value-icon">🤝</span>
+      <span class="value-label">Accoglienza</span>
+      <span class="value-desc">Ogni cliente è di casa</span>
+    </div>
+    <div class="value-item">
+      <span class="value-icon">📍</span>
+      <span class="value-label">Territorio</span>
+      <span class="value-desc">Radici abruzzesi, cuore aperto</span>
+    </div>
+    <div class="value-item">
+      <span class="value-icon">🕐</span>
+      <span class="value-label">Sempre aperti</span>
+      <span class="value-desc">Tutti i giorni, sempre</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="reviews-section">
+  <div class="section-label">Cosa dicono di noi</div>
+  <div class="section-title">Recensioni</div>
+  <a class="ta-link" href="https://www.tripadvisor.com/Attraction_Review-g1937744-d5928684-Reviews-BAR_Zenit_PUB-Ateleta_Province_of_L_Aquila_Abruzzo.html" target="_blank" rel="noopener">
+    ↗ Vedi su TripAdvisor
+  </a>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★★</div>
+    <div class="review-title">Super Consigliato!</div>
+    <div class="review-text">"Ci siamo stati sia per cena che per colazione. Prezzi bassissimi per un'ottima qualità — 5 panini grandi, 3 Coca-Cola, 3 acque, 2 porzioni di patatine e 2 di alette: circa 60€! La cameriera super disponibile e gentile. Super consigliato!"</div>
+    <div class="review-meta">Mimigirasole · Napoli · Febbraio 2025</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★★</div>
+    <div class="review-title">Tasty Night</div>
+    <div class="review-text">"Siamo arrivati alle 02:05. Nonostante l'ora tarda, Vincenzo, con la sua gentilezza e simpatia, ci ha deliziato con tre panini di altissima qualità. Sempre disponibile e preciso. Non ce ne sono molti come questo pub. Sempre top!"</div>
+    <div class="review-meta">Domenico L. · Agosto 2023</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★★</div>
+    <div class="review-title">Ottimo cibo, staff amichevole</div>
+    <div class="review-text">"Panini e patatine eccellenti per un pub di paese, oltre ogni aspettativa. Staff molto amichevole e prodotti di qualità. Consigliato."</div>
+    <div class="review-meta">Francesco M. · Napoli · Agosto 2025</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★</div>
+    <div class="review-title">Molto buono</div>
+    <div class="review-text">"Pub carino e accogliente, staff disponibile ed ottima qualità di panini e patatine. Super consigliato per chi ama trascorrere una serata fuori casa 🥰"</div>
+    <div class="review-meta">Viaggiatore · Giugno 2025</div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-info">
+    Via Stazione, 6 — 67030 Ateleta (AQ)<br>
+    <a href="tel:+393515370997">351 537 0997</a>
+  </div>
+</footer>
+
+</body>
+</html>

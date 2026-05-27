@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prenota — Bar Zenit Pub</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#CF3D17;--white:#FCFAF6;--black:#1a1a1a;--grey:#7a7a7a;--nav-h:54px}
+body{font-family:'Barlow Condensed',sans-serif;background:var(--white);color:var(--black);padding-top:var(--nav-h);min-height:100svh;display:flex;flex-direction:column}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:var(--nav-h);background:var(--white);
+  border-bottom:2px solid var(--black);
+  display:grid;grid-template-columns:var(--nav-h) 1fr var(--nav-h);
+  align-items:center;
+}
+.nav-back{
+  display:flex;align-items:center;justify-content:center;
+  width:var(--nav-h);height:var(--nav-h);
+  text-decoration:none;color:var(--black);font-size:22px;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-back:active{color:var(--red)}
+.nav-title{text-align:center;font-size:13px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
+.nav-spacer{width:var(--nav-h)}
+
+/* ── CONTENT ── */
+.page-content{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px 48px;
+  max-width:500px;margin:0 auto;width:100%;
+}
+
+.prenota-head{text-align:center;margin-bottom:40px}
+.prenota-head h1{
+  font-size:clamp(36px,10vw,60px);font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;line-height:.95;
+  margin-bottom:12px;
+}
+.prenota-head p{
+  font-size:15px;font-weight:400;color:var(--grey);line-height:1.55;
+}
+
+/* ── FORM ── */
+.prenota-form{width:100%}
+.field{margin-bottom:16px}
+.field label{
+  display:block;
+  font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:7px;color:var(--black);
+}
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  background:transparent;
+  border:2px solid var(--black);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:600;
+  color:var(--black);
+  padding:12px 14px;
+  outline:none;
+  transition:border-color .15s;
+  -webkit-appearance:none;
+  border-radius:0;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{border-color:var(--red)}
+.field textarea{resize:none;height:80px;line-height:1.4}
+.field select{cursor:pointer;background:var(--white)}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── CTA BUTTONS ── */
+.cta-section{margin-top:8px;display:flex;flex-direction:column;gap:10px;width:100%}
+
+.btn-wa{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  background:#25D366;color:#fff;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  padding:18px 20px;text-decoration:none;
+  border:none;cursor:pointer;width:100%;
+  transition:background .15s,transform .1s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-wa:active{background:#1ebe5a;transform:scale(0.98)}
+.btn-wa svg{width:24px;height:24px;flex-shrink:0}
+
+.btn-tel{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:transparent;color:var(--black);
+  border:2px solid var(--black);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  padding:14px 20px;text-decoration:none;
+  transition:background .15s,color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-tel:active{background:var(--black);color:var(--white)}
+
+/* ── ORARI INFO ── */
+.orari-box{
+  width:100%;margin-top:32px;
+  border:2px solid var(--black);
+  padding:18px 16px;
+}
+.orari-box-title{
+  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  margin-bottom:12px;opacity:.5;
+}
+.orari-row{
+  display:flex;justify-content:space-between;
+  font-size:14px;font-weight:600;
+  padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.orari-row:last-child{border-bottom:none}
+.orari-row .day{font-weight:800}
+.orari-row .hrs{opacity:.6}
+
+@media(min-width:768px){
+  .page-content{padding:56px 24px 64px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html" aria-label="Torna alla home">&#8592;</a>
+  <div class="nav-title">Prenota</div>
+  <div class="nav-spacer"></div>
+</nav>
+
+<div class="page-content">
+
+  <div class="prenota-head">
+    <h1>Riserva<br>il tavolo</h1>
+    <p>Compila il form e invialo su WhatsApp — ti confermiamo subito.</p>
+  </div>
+
+  <div class="prenota-form" id="prenotaForm">
+    <div class="field">
+      <label>Nome</label>
+      <input type="text" id="f-nome" placeholder="Il tuo nome" autocomplete="given-name">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Persone</label>
+        <select id="f-persone">
+          <option value="1">1 persona</option>
+          <option value="2">2 persone</option>
+          <option value="3">3 persone</option>
+          <option value="4" selected>4 persone</option>
+          <option value="5">5 persone</option>
+          <option value="6">6 persone</option>
+          <option value="7+">7+</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Data</label>
+        <input type="date" id="f-data">
+      </div>
+    </div>
+    <div class="field">
+      <label>Ora</label>
+      <select id="f-ora">
+        <option>18:00</option><option>18:30</option>
+        <option>19:00</option><option>19:30</option>
+        <option>20:00</option><option selected>20:30</option>
+        <option>21:00</option><option>21:30</option>
+        <option>22:00</option><option>22:30</option>
+        <option>23:00</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Note (opzionale)</label>
+      <textarea id="f-note" placeholder="Allergie, occasioni speciali..."></textarea>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <button class="btn-wa" onclick="inviaWA()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Invia su WhatsApp
+    </button>
+    <a class="btn-tel" href="tel:+393515370997">
+      📞 &nbsp;Chiama direttamente
+    </a>
+  </div>
+
+  <div class="orari-box">
+    <div class="orari-box-title">Siamo aperti</div>
+    <div class="orari-row"><span class="day">Tutti i giorni</span><span class="hrs">00:00 – 23:59</span></div>
+  </div>
+
+</div>
+
+<script>
+// Imposta data minima = oggi
+document.getElementById('f-data').min = new Date().toISOString().split('T')[0];
+document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
+
+function inviaWA(){
+  const nome = document.getElementById('f-nome').value.trim() || 'Cliente';
+  const persone = document.getElementById('f-persone').value;
+  const data = document.getElementById('f-data').value;
+  const ora = document.getElementById('f-ora').value;
+  const note = document.getElementById('f-note').value.trim();
+
+  const dataFormattata = data ? new Date(data).toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'}) : '---';
+
+  let msg = `Ciao Bar Zenit Pub! 👋\n\nVorrei prenotare un tavolo:\n\n`;
+  msg += `👤 Nome: ${nome}\n`;
+  msg += `👥 Persone: ${persone}\n`;
+  msg += `📅 Data: ${dataFormattata}\n`;
+  msg += `🕐 Ora: ${ora}\n`;
+  if(note) msg += `📝 Note: ${note}\n`;
+  msg += `\nGrazie!`;
+
+  const numero = '393515370997';
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
