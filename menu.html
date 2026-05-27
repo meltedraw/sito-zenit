@@ -133,71 +133,60 @@ nav{
 
 /* ── PIATTO DEL GIORNO ── */
 .featured{
-  background:var(--black);
+  background:var(--red);
   color:var(--white);
-  margin:0;
+  padding:18px 18px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
   position:relative;
   overflow:hidden;
 }
-.featured-photo{
-  width:100%;height:200px;
-  object-fit:cover;
-  display:block;
-  filter:brightness(.75);
-}
-/* placeholder SVG finché non c'è la foto vera */
-.featured-photo-placeholder{
-  width:100%;height:200px;
-  background:var(--red);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-}
-.featured-photo-placeholder::before{
+/* pattern diagonale sottile */
+.featured::before{
   content:'';
-  position:absolute;inset:0;
+  position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(
     -45deg,
-    transparent,transparent 20px,
-    rgba(0,0,0,.07) 20px,rgba(0,0,0,.07) 21px
+    transparent,transparent 18px,
+    rgba(0,0,0,.05) 18px,rgba(0,0,0,.05) 19px
   );
 }
-.featured-photo-placeholder span{
-  position:relative;
-  font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
-  color:rgba(255,255,255,.4);
-}
-.featured-body{
-  padding:18px 18px 22px;
+.featured-left{
+  flex:1;min-width:0;position:relative;
 }
 .featured-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--red);color:var(--white);
-  font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
-  padding:4px 12px;margin-bottom:14px;
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(0,0,0,.25);
+  font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:var(--white);
+  padding:3px 10px;margin-bottom:10px;
 }
-.featured-badge::before{content:'★';font-size:9px}
+.featured-badge::before{content:'★';font-size:8px}
 .featured-name{
-  font-size:clamp(32px,9vw,48px);font-weight:800;
-  text-transform:uppercase;letter-spacing:1px;line-height:.95;
-  margin-bottom:8px;
+  font-size:clamp(28px,8vw,42px);font-weight:800;
+  text-transform:uppercase;letter-spacing:.5px;line-height:.95;
+  margin-bottom:7px;
 }
 .featured-desc{
-  font-size:14px;font-weight:400;
-  color:rgba(255,255,255,.55);
-  line-height:1.5;margin-bottom:16px;
+  font-size:13px;font-weight:400;
+  color:rgba(255,255,255,.65);
+  line-height:1.45;
 }
-.featured-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:14px;
-  border-top:1px solid rgba(255,255,255,.1);
+.featured-right{
+  flex-shrink:0;
+  display:flex;flex-direction:column;align-items:flex-end;
+  gap:4px;position:relative;
 }
 .featured-price{
-  font-size:clamp(32px,9vw,44px);font-weight:800;
-  color:var(--red);line-height:1;
+  font-size:clamp(30px,8vw,40px);font-weight:800;
+  color:var(--white);line-height:1;
+  text-shadow:0 2px 8px rgba(0,0,0,.2);
 }
-.featured-tag{
-  font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
-  color:rgba(255,255,255,.25);text-align:right;line-height:1.4;
+.featured-solo{
+  font-size:9px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+  text-align:right;
 }
 
 /* ── CAT HEAD & SALSA ── */
@@ -267,17 +256,14 @@ footer{
 
 <!-- PIATTO DEL GIORNO -->
 <div class="featured">
-  <div class="featured-photo-placeholder">
-    <span>Foto piatto del giorno</span>
-  </div>
-  <div class="featured-body">
+  <div class="featured-left">
     <div class="featured-badge">Oggi</div>
     <div class="featured-name">Texas<br>Burger</div>
-    <div class="featured-desc">bun artigianale · burger 200gr · cheddar · bacon · insalata · maionese</div>
-    <div class="featured-footer">
-      <div class="featured-price">10,50€</div>
-      <div class="featured-tag">Solo<br>Oggi</div>
-    </div>
+    <div class="featured-desc">bun artigianale · burger 200gr<br>cheddar · bacon · insalata</div>
+  </div>
+  <div class="featured-right">
+    <div class="featured-price">10,50€</div>
+    <div class="featured-solo">Solo oggi</div>
   </div>
 </div>
 
