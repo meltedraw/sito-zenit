@@ -285,6 +285,56 @@ nav{
 .salsa-row b{font-size:18px;font-weight:800;color:var(--red)}
 
 /* ─────────────────────────────────────────
+   RECENSIONI
+───────────────────────────────────────── */
+#recensioni{
+  padding:56px 18px 64px;
+  background:var(--black);
+  color:var(--white);
+  scroll-margin-top:calc(var(--nav-h) + var(--tab-h));
+}
+.recensioni-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:28px;padding-bottom:12px;
+  border-bottom:2px solid rgba(255,255,255,0.12);
+}
+.recensioni-head h2{
+  font-size:clamp(30px,9vw,52px);font-weight:800;
+  text-transform:uppercase;letter-spacing:1.5px;line-height:1;
+}
+.ta-badge{
+  display:flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  opacity:0.45;text-decoration:none;color:inherit;
+  flex-shrink:0;
+}
+.ta-badge svg{width:18px;height:18px;opacity:0.6}
+
+.review-card{
+  padding:22px 0;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.review-card:last-child{border-bottom:none}
+.review-stars{
+  font-size:14px;letter-spacing:2px;color:var(--red);
+  margin-bottom:8px;
+}
+.review-title{
+  font-size:clamp(18px,5vw,22px);font-weight:800;
+  text-transform:uppercase;letter-spacing:0.5px;
+  margin-bottom:8px;line-height:1.1;
+}
+.review-text{
+  font-size:14px;font-weight:400;line-height:1.6;
+  opacity:0.72;
+  margin-bottom:10px;
+}
+.review-meta{
+  font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  opacity:0.35;
+}
+
+/* ─────────────────────────────────────────
    CHI SIAMO
 ───────────────────────────────────────── */
 #chi-siamo{
@@ -419,6 +469,7 @@ footer{
     <a href="#cocktail">Cocktail</a>
     <a href="#bevande">Bevande</a>
     <a href="#birre">Birre</a>
+    <a href="#recensioni">Recensioni</a>
     <a href="#chi-siamo">Chi Siamo</a>
   </div>
 </nav>
@@ -434,6 +485,7 @@ footer{
   <a href="#cocktail" onclick="closeMenu()">Cocktail</a>
   <a href="#bevande" onclick="closeMenu()">Bevande</a>
   <a href="#birre" onclick="closeMenu()">Birre</a>
+  <a href="#recensioni" onclick="closeMenu()">Recensioni</a>
   <a href="#chi-siamo" onclick="closeMenu()">Chi Siamo</a>
 </div>
 
@@ -972,6 +1024,45 @@ footer{
       <div class="item-size">33 cl</div>
     </div>
     <div class="item-price">3,50€</div>
+  </div>
+</section>
+
+<!-- RECENSIONI -->
+<section id="recensioni">
+  <div class="recensioni-head">
+    <h2>Recensioni</h2>
+    <a class="ta-badge" href="https://www.tripadvisor.com/Attraction_Review-g1937744-d5928684-Reviews-BAR_Zenit_PUB-Ateleta_Province_of_L_Aquila_Abruzzo.html" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      TripAdvisor
+    </a>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★★</div>
+    <div class="review-title">Super Consigliato!</div>
+    <div class="review-text">"Ci siamo stati per cena e per colazione. Prezzi bassissimi per un'ottima qualità — 5 panini grandi, 3 Coca-Cola, 3 acque, 2 porzioni di patatine e 2 di alette di pollo: circa 60€! La ragazza con i capelli neri, la cameriera, è stata super disponibile e molto gentile. Ci siamo divertiti tantissimo. Super consigliato!"</div>
+    <div class="review-meta">Mimigirasole · Napoli &nbsp;·&nbsp; Febbraio 2025</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★★</div>
+    <div class="review-title">Tasty Night</div>
+    <div class="review-text">"Siamo arrivati a 02:05 di notte. Nonostante l'ora tarda, Vincenzo, con la sua gentilezza e simpatia, ha deliziato i nostri palati esigenti con tre panini di altissima qualità. Sempre disponibile e preciso. Non ce ne sono molti come questo pub. Sempre top!"</div>
+    <div class="review-meta">Domenico L. &nbsp;·&nbsp; Agosto 2023</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★★</div>
+    <div class="review-title">Ottimo cibo, staff amichevole</div>
+    <div class="review-text">"Panini e patatine eccellenti per un pub di paese, oltre ogni aspettativa. Staff molto amichevole e prodotti di qualità. Consigliato."</div>
+    <div class="review-meta">Francesco M. · Napoli &nbsp;·&nbsp; Agosto 2025</div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-stars">★★★★</div>
+    <div class="review-title">Molto buono</div>
+    <div class="review-text">"Pub carino e accogliente, staff disponibile ed ottima qualità di panini e patatine. Super consigliato per chi ama trascorrere una serata fuori casa 🥰"</div>
+    <div class="review-meta">Viaggiatore &nbsp;·&nbsp; Giugno 2025</div>
   </div>
 </section>
 
