@@ -37,6 +37,9 @@ nav{
   border-bottom:2px solid var(--black);
   display:flex;overflow-x:auto;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  /* impedisce drift verticale quando si swipe orizzontale sui tab */
+  touch-action:pan-x;
+  overscroll-behavior-x:contain;
 }
 .menu-tabs::-webkit-scrollbar{display:none}
 .menu-tab{
@@ -299,16 +302,33 @@ document.querySelectorAll('.menu-item').forEach(item => {
   img.src=placeholderSvg(label.trim()); img.alt=label.trim(); img.loading='lazy';
   expand.appendChild(img);
   item.insertAdjacentElement('afterend', expand);
-  let touching=false;
+
   const toggle=()=>{
     const open=expand.classList.contains('open');
     document.querySelectorAll('.item-photo-expand.open').forEach(e=>e.classList.remove('open'));
     document.querySelectorAll('.menu-item.photo-open').forEach(m=>m.classList.remove('photo-open'));
     if(!open){ expand.classList.add('open'); item.classList.add('photo-open'); setTimeout(()=>expand.scrollIntoView({behavior:'smooth',block:'nearest'}),100); }
   };
-  item.addEventListener('touchstart',()=>{touching=true;},{passive:true});
-  item.addEventListener('touchend',e=>{if(touching){touching=false;e.preventDefault();toggle();}});
-  item.addEventListener('click',()=>{if(!touching)toggle();});
+
+  // Touch: apri solo se il dito non si è mosso (tap, non scroll)
+  let t0x=0, t0y=0, isTap=false;
+  item.addEventListener('touchstart', e=>{
+    t0x = e.touches[0].clientX;
+    t0y = e.touches[0].clientY;
+    isTap = true;
+  }, {passive:true});
+  item.addEventListener('touchmove', e=>{
+    const dx = Math.abs(e.touches[0].clientX - t0x);
+    const dy = Math.abs(e.touches[0].clientY - t0y);
+    if(dx > 8 || dy > 8) isTap = false; // si è mosso → non è un tap
+  }, {passive:true});
+  item.addEventListener('touchend', e=>{
+    if(isTap){ e.preventDefault(); toggle(); }
+    isTap = false;
+  }, {passive:false});
+
+  // Click desktop
+  item.addEventListener('click', toggle);
 });
 </script>
 </body>
